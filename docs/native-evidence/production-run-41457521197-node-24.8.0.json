@@ -1,0 +1,28 @@
+{
+  "suite": "skillwhy-native-conformance-v1",
+  "status": "passed",
+  "checkedAt": "2026-11-02T13:58:19.480Z",
+  "hostVersion": "0.166.0",
+  "adapterVersion": "0.1.0-alpha.3",
+  "platform": "linux",
+  "arch": "x64",
+  "nodeVersion": "24.8.0",
+  "buildMode": "production",
+  "candidateTarget": null,
+  "productionSupported": true,
+  "sourceRevision": "e3b023d516645f251f83f9abdcdc5ffcdef5466c",
+  "cases": [
+    "enabled-project-fixture",
+    "duplicate-names-preserved",
+    "changed-skill-digest",
+    "cli-capture-diff-share",
+    "minimal-selected-share",
+    "session-disabled-fixture",
+    "enabled-state-diff",
+    "missing-description-partial",
+    "partial-diff-inconclusive",
+    "session-override-not-persisted"
+  ],
+  "scope": "Fresh CLI metadata for temporary fixtures only; no model turns or skill execution.",
+  "privacy": "No raw inventory, user configuration, paths, or stderr are included in this report."
+}

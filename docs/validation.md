@@ -47,7 +47,22 @@ copy's compatibility predicate to admit Codex 0.166.0/Linux x64. The same ten li
 fixture checks ran through this copy; production source and the original build
 were unchanged. These are candidate results, not unmodified-production results.
 After manifest admission, the workflow defaults to `supported`; its production
-verification run remains to be recorded separately.
+verification was recorded separately below.
+
+The [production run 41457521197](https://github.com/hyscodebase/skillwhy/actions/runs/41457521197)
+passed on Ubuntu 24.04 x64 at source commit
+`e3b023d516645f251f83f9abdcdc5ffcdef5466c`, using the unmodified compatibility
+manifest and normal npm Codex launcher:
+
+| Node.js | Checked at (UTC) | Build mode | Result and preserved summary |
+| --- | --- | --- | --- |
+| 22.20.0 | 2026-11-02 13:58:12 | Production | [Ten checks passed](native-evidence/production-run-41457521197-node-22.20.0.json). |
+| 24.8.0 | 2026-11-02 13:58:19 | Production | [Ten checks passed](native-evidence/production-run-41457521197-node-24.8.0.json). |
+
+Both downloaded production artifacts were independently checked for the same
+fixed field/case lists, exact source revision and versions, `buildMode: production`,
+`candidateTarget: null`, and `productionSupported: true`. No experimental
+compatibility override was applied in these production checks.
 
 This workflow is manually dispatched, uses no supplied login or model API
 credentials, and requests no model turns. It is separate from the default CI
