@@ -57,7 +57,6 @@ jobs:
       contents: write
     env:
       RELEASE_TAG: ${{ github.ref_name }}
-      RELEASE_DIR: ${{ runner.temp }}/skillwhy-release
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -71,7 +70,10 @@ jobs:
       - run: npm ci
       - name: Pack, install into an isolated prefix, smoke test and checksum
         run: node scripts/release-build.mjs
+        env:
+          RELEASE_DIR: ${{ runner.temp }}/skillwhy-release
       - name: Publish verified assets as a GitHub prerelease
         run: node scripts/release-publish.mjs
         env:
+          RELEASE_DIR: ${{ runner.temp }}/skillwhy-release
           GH_TOKEN: ${{ github.token }}
