@@ -3,17 +3,21 @@
 같은 저장소를 설치했는데 서로 다른 Skill이 보이는 상황을 조사하는 CLI입니다.
 Codex CLI를 새로 실행해 발견 목록을 수집하고 두 환경을 비교합니다.
 
+![합성 데이터로 보여주는 42초 CLI 데모](https://raw.githubusercontent.com/hyscodebase/skillwhy/main/assets/demo.gif)
+
+실제 CLI 출력의 일부를 사용한 합성 예시입니다. [영상](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo.mp4)과 [전체 출력 기록](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo-transcript.txt)도 제공합니다.
+
 Node.js 22 이상과 Git이 있다면 한 줄로 데모를 실행할 수 있습니다.
 
 ```sh
-npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.2 demo
+npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo
 ```
 
 처음에는 해당 태그의 소스와 빌드 의존성을 다운로드합니다.
 빌드된 패키지를 한 번 설치하고 짧은 명령으로 사용하려면:
 
 ```sh
-npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.2/hyscodebase-skillwhy-0.1.0-alpha.2.tgz
+npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.3/hyscodebase-skillwhy-0.1.0-alpha.3.tgz
 skillwhy demo
 ```
 
@@ -55,3 +59,8 @@ Desktop 채팅의 상태도 검사하지 않습니다. 공유 파일은 한 항�
 
 첫 사용 경험과 실제 도움 여부를 확인할 [10분 파일럿 안내](pilot.md)와 피드백 양식도 제공합니다.
 외부 사용자의 파일럿 결과와 반복 사용은 아직 검증되지 않았습니다.
+
+결과가 불완전할 때는 [문제 해결 안내](troubleshooting.md)를 확인하세요.
+유지관리자용 [인터뷰 질문과 판정 기준](interviews.md), [후보 조사와 초대 초안](outreach.md),
+[주간 지표](metrics.md)도 준비했습니다. npm 레지스트리 게시 상태와 준비 절차는
+[npm 배포 문서](npm-publishing.md)에 기록합니다.

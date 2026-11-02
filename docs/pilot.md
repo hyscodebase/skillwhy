@@ -8,7 +8,7 @@ not evidence of adoption or time saved. Stop after ten minutes, even if blocked.
 With Node.js 22 or later and Git:
 
 ```sh
-npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.2 demo
+npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo
 ```
 
 The initial download/build needs internet access. The synthetic demo needs no
@@ -26,7 +26,7 @@ downgrade Codex for this pilot.
 If you do not already have SkillWhy installed, use the compiled release:
 
 ```sh
-npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.2/hyscodebase-skillwhy-0.1.0-alpha.2.tgz
+npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.3/hyscodebase-skillwhy-0.1.0-alpha.3.tgz
 skillwhy --version
 ```
 
@@ -72,3 +72,7 @@ unsuccessful attempts are useful; no successful outcome is assumed.
 Do not attach raw snapshots, configuration, skill bodies, private paths, API keys,
 or secrets. No attachment is needed. Nothing is sent automatically; filing an
 issue is your choice.
+
+Maintainers can use the [interview guide](interviews.md) to record the problem,
+whether assistance was needed, and the participant's interpretation of the result.
+See [troubleshooting](troubleshooting.md) for incomplete captures or comparisons.

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // Opt-in live metadata checks. This script never changes user configuration.
 import { constants } from 'node:fs';
-import { access, chmod, mkdir, mkdtemp, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
+import { access, chmod, cp, mkdir, mkdtemp, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { delimiter, dirname, isAbsolute, join, resolve, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -34,11 +34,11 @@ async function findExecutable(binary) {
   throw new CheckFailure('CODEX_NOT_FOUND');
 }
 
-function runCli(args, expectedExit = 0) {
+function runCli(args, expectedExit = 0, cliPath = cli) {
   let output;
   let status = 0;
   try {
-    output = execFileSync(process.execPath, [cli, ...args], {
+    output = execFileSync(process.execPath, [cliPath, ...args], {
       encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
       maxBuffer: 16 * 1024 * 1024, timeout: 45_000, killSignal: 'SIGKILL',
     });
@@ -53,10 +53,36 @@ function runCli(args, expectedExit = 0) {
 
 async function readJson(path) { return JSON.parse(await readFile(path, 'utf8')); }
 
-async function runNative(binary) {
-  check(process.platform === 'darwin' && process.arch === 'arm64', 'UNSUPPORTED_PLATFORM');
+/** Test-only candidate: copy compiled code and override one pure predicate there. */
+export async function createCandidateBuild(temporary) {
+  const candidate = join(temporary, 'candidate-build');
+  await mkdir(candidate, { mode: 0o700 });
+  await cp(join(repo, 'dist', 'src'), join(candidate, 'dist', 'src'), { recursive: true, errorOnExist: true, force: false });
+  await cp(join(repo, 'package.json'), join(candidate, 'package.json'), { errorOnExist: true, force: false });
+  const original = pathToFileURL(join(repo, 'dist', 'src', 'compatibility.js')).href;
+  const override = `// Temporary conformance override; never published.\n` +
+    `import * as production from ${JSON.stringify(original)};\n` +
+    `export * from ${JSON.stringify(original)};\n` +
+    `export function isSupportedNativeHost(version, platform = process.platform, arch = process.arch) {\n` +
+    `  return production.isSupportedNativeHost(version, platform, arch) ||\n` +
+    `    (version === ${JSON.stringify(expectedVersion)} && platform === 'linux' && arch === 'x64');\n` +
+    `}\n`;
+  await writeFile(join(candidate, 'dist', 'src', 'compatibility.js'), override, { mode: 0o600 });
+  return join(candidate, 'dist', 'src', 'cli.js');
+}
+
+async function runNative(binary, candidateTarget) {
+  check(candidateTarget === undefined || candidateTarget === 'linux-x64', 'UNSUPPORTED_CANDIDATE');
   check(Number(process.versions.node.split('.')[0]) >= 22, 'UNSUPPORTED_NODE');
   await access(cli).catch(() => { throw new CheckFailure('BUILD_REQUIRED'); });
+  const production = await import(pathToFileURL(join(repo, 'dist', 'src', 'compatibility.js')).href);
+  const productionSupported = production.isSupportedNativeHost(expectedVersion);
+  if (candidateTarget !== undefined) {
+    check(process.platform === 'linux' && process.arch === 'x64', 'CANDIDATE_PLATFORM_MISMATCH');
+    check(!productionSupported, 'CANDIDATE_ALREADY_SUPPORTED');
+  } else {
+    check(productionSupported, 'UNSUPPORTED_PLATFORM');
+  }
   const executable = await findExecutable(binary);
   let version;
   try {
@@ -69,6 +95,16 @@ async function runNative(binary) {
   const temporary = await realpath(await mkdtemp(join(tmpdir(), 'skillwhy-native-')));
   await chmod(temporary, 0o700);
   try {
+    // Check that the shipped CLI rejects this unreviewed combination first.
+    if (candidateTarget !== undefined) {
+      const unsupportedFile = join(temporary, 'production-unsupported.private.json');
+      runCli(['capture', '--cwd', temporary, '--out', unsupportedFile, '--codex-bin', executable], 2);
+      const unsupported = await readJson(unsupportedFile);
+      check(unsupported.capture.status === 'unsupported' && unsupported.entries.length === 0 &&
+        unsupported.errors.some(error => error.code === 'UNSUPPORTED_HOST_COMBINATION'), 'PRODUCTION_SUPPORT_GATE_CHANGED');
+    }
+    const activeCli = candidateTarget === undefined ? cli : await createCandidateBuild(temporary);
+    const invoke = (args, expectedExit = 0) => runCli(args, expectedExit, activeCli);
     const project = join(temporary, 'project');
     const skills = join(project, '.agents', 'skills');
     const unique = randomUUID().slice(0, 8);
@@ -90,7 +126,7 @@ async function runNative(binary) {
     const shareFile = join(temporary, 'selected.share.json');
     const capture = async (out, host = executable, expectedExit = 0) => {
       try {
-        runCli(['capture', '--cwd', project, '--out', out, '--codex-bin', host, '--digest', '--timeout-ms', '10000'], expectedExit);
+        invoke(['capture', '--cwd', project, '--out', out, '--codex-bin', host, '--digest', '--timeout-ms', '10000'], expectedExit);
       } catch (error) {
         // Snapshot error codes are authored by SkillWhy; raw native messages are absent.
         const failed = await readJson(out).catch(() => null);
@@ -115,9 +151,9 @@ async function runNative(binary) {
     const after = await capture(afterFile);
     const changedTarget = after.entries.find(entry => entry.sourcePath === target);
     check(changedTarget?.content.status === 'collected' && changedTarget.content.digest !== baselineTarget.content.digest, 'DIGEST_CHANGE_NOT_OBSERVED');
-    const changed = JSON.parse(runCli(['diff', beforeFile, afterFile, '--map-root', 'project=project', '--json']));
+    const changed = JSON.parse(invoke(['diff', beforeFile, afterFile, '--map-root', 'project=project', '--json']));
     check(changed.status === 'complete' && changed.differences.filter(item => item.kind === 'content-changed').length === 1, 'CONTENT_DIFF_INCORRECT');
-    runCli(['share', '--snapshot', afterFile, '--entry', changedTarget.entryId, '--alias', 'native-fixture', '--include-digest', '--out', shareFile]);
+    invoke(['share', '--snapshot', afterFile, '--entry', changedTarget.entryId, '--alias', 'native-fixture', '--include-digest', '--out', shareFile]);
     const shared = await readJson(shareFile);
     const serialized = JSON.stringify(shared);
     check(shared.artifactKind === 'share-v1' && shared.entries.length === 1 && shared.entries[0].name === null, 'SHARE_SELECTION_INCORRECT');
@@ -131,7 +167,7 @@ async function runNative(binary) {
     await writeFile(wrapper, `#!/bin/sh\nexec ${shellQuote(executable)} -c ${shellQuote(override)} "$@"\n`, { mode: 0o700 });
     const disabled = await capture(disabledFile, wrapper);
     check(disabled.entries.find(entry => entry.sourcePath === target)?.enabled === false, 'DISABLED_FIXTURE_NOT_OBSERVED');
-    const disabledDiff = JSON.parse(runCli(['diff', afterFile, disabledFile, '--map-root', 'project=project', '--json']));
+    const disabledDiff = JSON.parse(invoke(['diff', afterFile, disabledFile, '--map-root', 'project=project', '--json']));
     check(disabledDiff.status === 'complete' && disabledDiff.differences.some(item => item.kind === 'enabled-changed' && item.before === true && item.after === false), 'DISABLED_DIFF_INCORRECT');
 
     const malformed = join(skills, 'malformed', 'SKILL.md');
@@ -144,13 +180,16 @@ async function runNative(binary) {
     check(broken.errors.some(error => error.code === 'NATIVE_SKILL_ERRORS'), 'MALFORMED_ERROR_NOT_OBSERVED');
     check(!broken.entries.some(entry => entry.sourcePath === malformed), 'MALFORMED_ENTRY_UNEXPECTEDLY_RETURNED');
     check(broken.entries.find(entry => entry.sourcePath === target)?.enabled === true, 'SESSION_OVERRIDE_PERSISTED_OR_TARGET_MISSING');
-    const brokenDiff = JSON.parse(runCli(['diff', afterFile, malformedFile, '--map-root', 'project=project', '--json'], 2));
+    const brokenDiff = JSON.parse(invoke(['diff', afterFile, malformedFile, '--map-root', 'project=project', '--json'], 2));
     check(brokenDiff.status === 'inconclusive' && !brokenDiff.differences.some(item => item.kind === 'not-returned' || item.kind === 'added'), 'PARTIAL_DIFF_OVERCLAIMED');
 
     return {
       suite: 'skillwhy-native-conformance-v1', status: 'passed', checkedAt: new Date().toISOString(),
       hostVersion: expectedVersion, adapterVersion: before.capture.adapterVersion,
       platform: process.platform, arch: process.arch, nodeVersion: process.versions.node,
+      buildMode: candidateTarget === undefined ? 'production' : 'temporary-candidate',
+      candidateTarget: candidateTarget ?? null, productionSupported,
+      sourceRevision: /^[a-f0-9]{40}$/i.test(process.env.GITHUB_SHA ?? '') ? process.env.GITHUB_SHA : null,
       cases: ['enabled-project-fixture', 'duplicate-names-preserved', 'changed-skill-digest',
         'cli-capture-diff-share', 'minimal-selected-share', 'session-disabled-fixture',
         'enabled-state-diff', 'missing-description-partial', 'partial-diff-inconclusive', 'session-override-not-persisted'],
@@ -162,17 +201,21 @@ async function runNative(binary) {
   }
 }
 
-try {
-  const { values } = parseArgs({ options: { live: { type: 'boolean' }, help: { type: 'boolean' }, 'codex-bin': { type: 'string' } } });
+export async function main() {
+ try {
+  const { values } = parseArgs({ options: { live: { type: 'boolean' }, help: { type: 'boolean' }, 'codex-bin': { type: 'string' }, candidate: { type: 'string' } } });
   if (values.help || !values.live) {
-    console.log('Usage: node scripts/native-conformance.mjs --live [--codex-bin PATH]\nBuild first with npm run build. Requires Codex 0.166.0 on macOS arm64.\nStarts fresh metadata-only processes; native startup may write caches/logs or use the network.\nUses temporary fixtures and a session-only config override. User configuration is not written.');
+    console.log('Usage: node scripts/native-conformance.mjs --live [--codex-bin PATH] [--candidate linux-x64]\nBuild first with npm run build. Requires Codex 0.166.0 and a reviewed platform.\nA candidate run changes only a temporary compiled copy; it does not grant production support.\nStarts fresh metadata-only processes; native startup may write caches/logs or use the network.\nUses temporary fixtures and a session-only config override. User configuration is not written.');
     if (!values.help) process.exitCode = 2;
   } else {
-    console.log(JSON.stringify(await runNative(values['codex-bin'] ?? 'codex'), null, 2));
+    console.log(JSON.stringify(await runNative(values['codex-bin'] ?? 'codex', values.candidate), null, 2));
   }
 } catch (error) {
   // Error objects from child processes can include full commands and native output.
   const code = error instanceof CheckFailure ? error.code : 'NATIVE_CONFORMANCE_FAILED';
   console.error(JSON.stringify({ suite: 'skillwhy-native-conformance-v1', status: 'failed', code }));
   process.exitCode = 2;
+ }
 }
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();

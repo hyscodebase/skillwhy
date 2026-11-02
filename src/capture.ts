@@ -5,8 +5,9 @@ import { basename, delimiter, dirname, isAbsolute, join, normalize, relative, re
 import type { CaptureOptions, SkillEntry, Snapshot } from "./types.js";
 import { CaptureFailure, isRecord, probeVersion, querySkills } from "./protocol.js";
 import { VERSION } from "./version.js";
+import { isSupportedNativeHost } from "./compatibility.js";
 
-export const SUPPORTED_CODEX_VERSION = "0.166.0";
+export { SUPPORTED_CODEX_VERSION } from "./compatibility.js";
 export const ADAPTER_VERSION = VERSION;
 const MAX_FILE_BYTES = 2 * 1024 * 1024;
 // Keep room for the project root if every returned entry has a different external root.
@@ -173,7 +174,7 @@ export async function captureSnapshot(options: CaptureOptions): Promise<Snapshot
     const timeoutMs = Math.min(options.timeoutMs ?? 30_000, 120_000);
     const version = await probeVersion({ executable, cwd, timeoutMs: Math.min(timeoutMs, 5_000) });
     snapshot.capture.hostVersion = version;
-    if (version !== SUPPORTED_CODEX_VERSION || process.platform !== "darwin" || process.arch !== "arm64") {
+    if (!isSupportedNativeHost(version)) {
       snapshot.capture.status = "unsupported";
       snapshot.errors.push({ code: "UNSUPPORTED_HOST_COMBINATION", scope: "capture" });
       return snapshot;
