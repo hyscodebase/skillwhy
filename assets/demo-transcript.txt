@@ -1,0 +1,134 @@
+SkillWhy synthetic demonstration
+
+Captured from the compiled CLI using node dist/src/cli.js.
+Commands below use the equivalent installed alias skillwhy.
+Output excerpts appear in the animation; this transcript retains full stdout.
+No native scan, user inventory, model turn, or skill execution is involved.
+
+$ skillwhy demo
+SkillWhy · skill discovery comparison
+SYNTHETIC EXAMPLE — NOT A LIVE SCAN
+Result: complete · compared entries: 1
+
+key:demo:release-review · enabled-changed
+  true → false [observed]
+  The returned enabled values differ for the explicitly associated entries. This does not establish selection or execution.
+
+Note: Comparison covers explicitly associated fresh CLI observations only; it does not establish whole-machine equivalence.
+Note: Skill discovery and enabled state do not prove model loading, invocation, or execution. Active Desktop sessions were not observed.
+Note: Content fingerprints cover SKILL.md only; referenced files and scripts were not compared.
+
+Model selected/read/executed a skill: NOT OBSERVED
+Existing Desktop session: NOT ASSESSED
+
+$ skillwhy inspect local.snapshot.json --skill release-review
+SkillWhy · local snapshot inspection
+SYNTHETIC EXAMPLE — NOT A LIVE SCAN
+Artifact: private-snapshot · capture: complete
+Coverage: complete-for-request · all-returned
+Entries: 1 of 1 stored · filter: name
+
+demo-entry · release-review
+  enabled: false · native scope: repo
+  location alias: project/.agents/skills/release-review/SKILL.md
+  content: collected · digest: present (value omitted)
+
+Note: Local inspection: names and relative location aliases may be private. Review this output before sharing; use share to create a minimal bundle.
+Note: Entry IDs identify individual returned copies. Duplicate names are listed separately; no winning copy is inferred.
+Note: Source paths and digest values are omitted. A present digest covers SKILL.md only; an omitted digest does not establish equal contents.
+Note: Skill loading, selection, execution, and the existing Desktop session were not observed.
+
+$ skillwhy share --snapshot local.snapshot.json --entry demo-entry --alias review --preview
+{
+  "schemaVersion": 1,
+  "artifactKind": "share-v1",
+  "snapshotId": "share-74b1a262-fd7f-4f5e-abe6-d8e442e82d13",
+  "capture": {
+    "host": "codex-cli",
+    "hostVersion": "0.166.0",
+    "adapterVersion": "0.1.0-alpha.3",
+    "surface": "fresh-cli-app-server",
+    "cwdAlias": "selected",
+    "status": "complete",
+    "capturedAt": "2026-11-02T00:00:00.000Z",
+    "synthetic": true
+  },
+  "coverage": {
+    "inventory": "complete-for-request",
+    "includedEntries": "selected",
+    "roots": "known",
+    "resources": "not-collected",
+    "activeDesktop": "not-observed",
+    "loadedOrExecuted": "not-observed"
+  },
+  "rootMappings": [
+    {
+      "alias": "selected",
+      "role": "selected",
+      "userConfirmed": true
+    }
+  ],
+  "entries": [
+    {
+      "entryId": "selected-entry",
+      "name": null,
+      "label": "review",
+      "comparisonKey": "selected:review",
+      "nativeScope": "repo",
+      "enabled": false,
+      "locationAlias": "selected/SKILL.md",
+      "content": {
+        "status": "redacted",
+        "algorithm": "sha256",
+        "coverage": [
+          "SKILL.md"
+        ],
+        "digest": null
+      },
+      "evidence": [
+        {
+          "field": "comparisonKey",
+          "level": "observed",
+          "source": "user-mapping",
+          "reference": "explicit-selection"
+        },
+        {
+          "field": "enabled",
+          "level": "observed",
+          "source": "skills/list",
+          "reference": "selected-entry"
+        }
+      ]
+    }
+  ],
+  "findings": [],
+  "errors": []
+}
+
+$ skillwhy share --snapshot maintainer.snapshot.json --entry demo-entry --alias review --out maintainer.share.json
+Minimal bundle saved: maintainer.share.json. No upload was performed.
+Review the file before sharing. Omitted entries and fields remain unknown.
+
+$ skillwhy share --snapshot local.snapshot.json --entry demo-entry --alias review --out local.share.json
+Minimal bundle saved: local.share.json. No upload was performed.
+Review the file before sharing. Omitted entries and fields remain unknown.
+
+$ skillwhy diff maintainer.share.json local.share.json --detail
+SkillWhy · skill discovery comparison
+SYNTHETIC EXAMPLE — NOT A LIVE SCAN
+Result: complete · compared entries: 1
+
+key:selected:review · enabled-changed
+  true → false [observed]
+  The returned enabled values differ for the explicitly associated entries. This does not establish selection or execution.
+
+Note: Comparison covers explicitly associated fresh CLI observations only; it does not establish whole-machine equivalence.
+Note: Skill discovery and enabled state do not prove model loading, invocation, or execution. Active Desktop sessions were not observed.
+Note: Content fingerprints cover SKILL.md only; referenced files and scripts were not compared.
+Note: A selected share contains only approved entries. Omitted entries are unknown, not missing.
+Note: SKILL.md contents were not compared for key:selected:review: a fingerprint was intentionally omitted. Missing fingerprints do not establish equal contents.
+Note: Some names were omitted or unavailable. Identity association uses explicit keys or mapped relative locations, never a name guess.
+
+Model selected/read/executed a skill: NOT OBSERVED
+Existing Desktop session: NOT ASSESSED
+

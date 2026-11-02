@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.0-alpha.3 — 2026-11-02
+
+- Add specific next steps for unsupported, partial, and failed captures and
+  unassociated private comparisons, plus a troubleshooting guide.
+- Add a 42-second GIF/video from actual synthetic CLI output with its full
+  transcript and reproducible renderer. This is not an external user case.
+- Reuse one CI workflow for branch checks and releases, gate it with a pinned
+  actionlint build and semantic regression probes, and group weekly dependency
+  update proposals.
+- Prepare public npm metadata and a manual distribution workflow that defaults
+  to a verified packaging dry run. npm registry publication still requires the
+  namespace owner's account setup and a successful real publication.
+- Add opt-in candidate native conformance, keeping experimental combinations
+  separate from the production support manifest.
+- Prepare maintainer interviews, public-source pilot candidates, and reviewed
+  outreach drafts. External responses and useful-case outcomes remain pending.
+- Add weekly public GitHub aggregate reports and a separate manual evidence
+  register. Repository interest signals are not interpreted as actual users.
+
 ## 0.1.0-alpha.2 — 2026-11-02
 
 - Add `inspect` to find individual entry IDs, including duplicate names, without

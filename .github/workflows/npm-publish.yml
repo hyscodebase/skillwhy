@@ -1,0 +1,100 @@
+name: npm distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing prerelease tag on main, beginning with v
+        required: true
+        type: string
+      publish:
+        description: Publish to npm using the configured trusted publisher
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-${{ inputs.release_tag }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      commit: ${{ steps.release.outputs.commit }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.release_tag }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+      - name: Validate the selected tag and its main ancestry
+        id: release
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          NPM_PUBLISH: ${{ inputs.publish }}
+        run: |
+          git merge-base --is-ancestor HEAD origin/main
+          node --input-type=module <<'NODE'
+          import { appendFileSync } from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          import { checkRelease } from './scripts/release-check.mjs';
+          import { checkNpmPublicationEvent } from './scripts/npm-check.mjs';
+          const expectedSha = execFileSync('git', ['rev-parse', 'HEAD^{commit}'], { encoding: 'utf8' }).trim();
+          const release = checkRelease({ tag: process.env.RELEASE_TAG, expectedSha });
+          checkNpmPublicationEvent(release, { publish: process.env.NPM_PUBLISH === 'true' });
+          appendFileSync(process.env.GITHUB_OUTPUT, `commit=${release.commit}\n`);
+          console.log(JSON.stringify(release));
+          NODE
+
+  test:
+    needs: validate
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ needs.validate.outputs.commit }}
+
+  package:
+    needs: [validate, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Check npm trusted publishing support
+        run: |
+          node --input-type=module <<'NODE'
+          import { execFileSync } from 'node:child_process';
+          const [major, minor, patch] = execFileSync('npm', ['--version'], { encoding: 'utf8' }).trim().split('.').map(Number);
+          if (major < 11 || (major === 11 && (minor < 5 || (minor === 5 && patch < 1)))) throw new Error('npm 11.5.1 or newer is required.');
+          NODE
+      - run: npm ci
+      - name: Build and verify an installed tarball
+        run: node scripts/release-build.mjs
+        env:
+          RELEASE_DIR: ${{ runner.temp }}/skillwhy-npm
+      - name: Preview the exact public prerelease package
+        working-directory: ${{ runner.temp }}/skillwhy-npm
+        run: npm publish --dry-run --ignore-scripts --access public --tag alpha ./*.tgz
+      - name: Publish using npm trusted publishing
+        if: inputs.publish
+        working-directory: ${{ runner.temp }}/skillwhy-npm
+        run: npm publish --ignore-scripts --access public --tag alpha ./*.tgz

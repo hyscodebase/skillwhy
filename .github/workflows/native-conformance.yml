@@ -1,0 +1,61 @@
+name: Native conformance (opt-in)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Candidate uses a temporary build; supported tests the production manifest.
+        type: choice
+        options:
+          - candidate-linux-x64
+          - supported
+        default: candidate-linux-x64
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  native-metadata:
+    name: Codex 0.166.0 / Linux x64 / Node ${{ matrix.node }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22.20.0', '24.8.0']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Install the exact native host in runner-local storage
+        run: npm install --prefix "$RUNNER_TEMP/skillwhy-codex" --no-audit --no-fund --save-exact @openai/codex@0.166.0
+      - name: Run native metadata fixtures without login or model turns
+        env:
+          NATIVE_MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          test "$(node -p 'process.platform + "/" + process.arch')" = linux/x64
+          case "$NATIVE_MODE" in
+            candidate-linux-x64)
+              node scripts/native-conformance.mjs --live --candidate linux-x64 --codex-bin "$RUNNER_TEMP/skillwhy-codex/node_modules/.bin/codex" > native-summary.json
+              ;;
+            supported)
+              node scripts/native-conformance.mjs --live --codex-bin "$RUNNER_TEMP/skillwhy-codex/node_modules/.bin/codex" > native-summary.json
+              ;;
+            *) exit 2 ;;
+          esac
+      - name: Upload the sanitized summary only
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-codex-0.166.0-linux-x64-node-${{ matrix.node }}-${{ inputs.mode }}
+          path: native-summary.json
+          if-no-files-found: error
+          retention-days: 30

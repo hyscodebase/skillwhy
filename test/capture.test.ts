@@ -7,6 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { captureSnapshot, parseSkillsList, readSkillDigest } from "../src/capture.js";
 import { parseSnapshot } from "../src/validate.js";
+import { isSupportedNativeHost, supportedNativeHostLabel } from "../src/compatibility.js";
 
 async function tempRoot(t: TestContext): Promise<string> {
   const root = await realpath(await mkdtemp(join(tmpdir(), "skillwhy-capture-")));
@@ -18,6 +19,15 @@ const skill = (path = "/test/.agents/skills/deploy/SKILL.md") => ({
   interface: { defaultPrompt: "PRIVATE_PROMPT" }, dependencies: { tools: [{ value: "PRIVATE_TOKEN" }] },
 });
 const payload = (skills: unknown[], errors: unknown[] = []) => ({ data: [{ cwd: "/test", skills, errors }] });
+
+test("production native support remains restricted to reviewed combinations", () => {
+  assert.equal(isSupportedNativeHost("0.166.0", "darwin", "arm64"), true);
+  assert.equal(isSupportedNativeHost("0.166.0", "linux", "x64"), false);
+  assert.equal(isSupportedNativeHost("0.166.0", "darwin", "x64"), false);
+  assert.equal(isSupportedNativeHost("0.166.0", "win32", "x64"), false);
+  assert.equal(isSupportedNativeHost("0.167.0", "darwin", "arm64"), false);
+  assert.equal(supportedNativeHostLabel(), "Codex CLI 0.166.0 on macOS arm64");
+});
 
 test("normalization preserves duplicate names and omits content/dependency fields", () => {
   const result = parseSkillsList(payload([skill(), { ...skill("/elsewhere/SKILL.md"), enabled: false, scope: "user" }]), "/test");

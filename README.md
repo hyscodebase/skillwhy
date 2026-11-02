@@ -6,12 +6,16 @@ SkillWhy compares the skills that fresh Codex CLI processes discover. Capture tw
 
 **Early alpha.** Native discovery is limited to explicitly supported CLI and OS versions. A discovered or enabled skill is **not proof that a model read or executed it**. An existing Desktop session is not inspected.
 
+![A 42-second synthetic CLI demo: compare, inspect, preview a selected share, then compare the shares](https://raw.githubusercontent.com/hyscodebase/skillwhy/main/assets/demo.gif)
+
+Actual CLI output from synthetic fixtures, shown as excerpts. [Video](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo.mp4) · [Full transcript](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo-transcript.txt). This demonstrates the workflow; external user outcomes are still being evaluated.
+
 ## Try the offline demo
 
 Requires Node.js 22 or later and Git:
 
 ```sh
-npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.2 demo
+npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo
 ```
 
 The first run downloads and builds the tagged source. The demo uses synthetic snapshots. It needs no Codex installation, API key, or model call.
@@ -19,7 +23,7 @@ The first run downloads and builds the tagged source. The demo uses synthetic sn
 To install the compiled GitHub release once and use the shorter `skillwhy` command:
 
 ```sh
-npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.2/hyscodebase-skillwhy-0.1.0-alpha.2.tgz
+npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.3/hyscodebase-skillwhy-0.1.0-alpha.3.tgz
 skillwhy demo
 ```
 
@@ -96,6 +100,8 @@ npm run typecheck
 No runtime dependencies. Tests use synthetic records and local fake subprocesses; [live compatibility observations](docs/validation.md) are documented separately. Tag releases run the test matrix, install the packaged CLI in a temporary directory, and publish the tarball with its checksum; see [release maintenance](docs/releasing.md).
 
 Try the [10-minute pilot](docs/pilot.md) to report installation friction or a useful support case. External pilot outcomes have not yet been established.
+
+For incomplete results, see [troubleshooting](docs/troubleshooting.md). Maintainers can use the [interview guide](docs/interviews.md) and [weekly metrics](docs/metrics.md) to track feedback. Registry publication is being prepared separately; [npm distribution](docs/npm-publishing.md) records its current status.
 
 [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [한국어](docs/README.ko.md) · [Roadmap](docs/roadmap.md)
 

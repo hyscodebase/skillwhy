@@ -47,3 +47,29 @@ per-process configuration override, without editing user settings. It inherits
 the current Codex environment and is not a network-isolation or managed-policy
 test. A passing default CI job validates offline and fake-process behavior;
 **it is not evidence of live Codex support on each CI operating system**.
+
+## Candidate platform checks
+
+Production decisions are centralized in `src/compatibility.ts`. Codex
+0.166.0/Linux x64 is currently an unapproved candidate; normal capture still
+returns `unsupported` there.
+
+The source-checkout script accepts `--candidate linux-x64` only on Linux x64.
+It checks the original CLI's unsupported result, then runs the live fixture suite
+against a temporary copy of the build with one compatibility-predicate override.
+There is no candidate flag or environment-variable bypass in the shipped CLI.
+The report labels this as `temporary-candidate`; it must not be presented as a
+production compatibility result.
+
+The manually dispatched `Native conformance (opt-in)` workflow installs exactly
+`@openai/codex@0.166.0` on Ubuntu 24.04 x64 and runs Node 22.20.0 and 24.8.0. Its
+`candidate-linux-x64` mode tests this temporary copy. The `supported` mode instead
+tests the unmodified production manifest and should fail on unapproved hosts.
+Only sanitized successful summaries are uploaded, with the source revision.
+
+Review both native job results, their ten fixture outcomes, and any limitations
+before adding a production tuple. Keep unsupported versions and architectures
+rejected. Container emulation, a matching response schema, and the default
+offline CI matrix are useful preliminary checks but cannot substitute for that
+evidence. Current observations and pending checks are recorded in
+[validation.md](validation.md).
