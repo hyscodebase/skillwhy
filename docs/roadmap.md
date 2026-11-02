@@ -12,6 +12,16 @@ it does not replace user validation or native compatibility evidence.
 - Single-entry support bundles with explicit disclosure choices.
 - Contract, privacy, process, and CLI tests.
 
+## Alpha 2 follow-up
+
+- Local inspection of selected names and duplicate entry IDs without opening raw snapshots.
+- Short tagged-source demo command and compiled GitHub release installation.
+- An opt-in runner for real Codex fixture observations, separate from synthetic CI tests.
+- Version-consistent packaging and a tested, checksummed GitHub prerelease workflow.
+
+The compatibility allowlist remains narrow. A publishing pipeline and local native
+fixtures do not replace independent users trying the product.
+
 ## Validate before expanding
 
 - Talk with five maintainers and identify two recurring support cases.

@@ -7,14 +7,16 @@ import { createShareBundle } from "./share.js";
 import { readSnapshot, writeSnapshot } from "./io.js";
 import { demoSnapshots } from "./demo.js";
 import { display, renderCapture, renderComparison } from "./report.js";
+import { inspectSnapshot, renderInspection } from "./inspect.js";
+import { VERSION } from "./version.js";
 
-const VERSION = "0.1.0-alpha.1";
 const help = `SkillWhy ${VERSION}
 Compare what fresh Codex CLI processes discover. No model turns are requested.
 
 Commands:
   skillwhy demo [--json] [--detail]
   skillwhy capture --cwd DIR --out FILE [--agent codex] [--digest]
+  skillwhy inspect SNAPSHOT [--skill NAME] [--json]
   skillwhy diff LEFT RIGHT [--map-root project=project] [--detail] [--json]
   skillwhy share --snapshot FILE --entry ID --alias LABEL --preview
   skillwhy share --snapshot FILE --skill NAME --alias LABEL --out FILE
@@ -56,12 +58,12 @@ async function main(): Promise<number> {
   const [command, ...args] = positionals;
   const allowed: Record<string, string[]> = {
     demo: ["json", "detail"], capture: ["agent", "cwd", "out", "digest", "codex-bin", "timeout-ms"],
-    diff: ["map-root", "detail", "json"], share: ["snapshot", "entry", "skill", "alias", "include-name", "include-digest", "preview", "out"],
+    diff: ["map-root", "detail", "json"], inspect: ["skill", "json"], share: ["snapshot", "entry", "skill", "alias", "include-name", "include-digest", "preview", "out"],
   };
   const flags = command ? allowed[command] : undefined;
   if (!flags) throw new Error("Unknown command. Run skillwhy --help.");
   for (const flag of Object.keys(values)) if (!flags.includes(flag)) throw new Error(`Option --${flag} does not apply to this command.`);
-  if (command !== "diff" && args.length) throw new Error("Unexpected positional arguments.");
+  if (command !== "diff" && command !== "inspect" && args.length) throw new Error("Unexpected positional arguments.");
 
   if (command === "demo") {
     const [left, right] = demoSnapshots();
@@ -82,6 +84,13 @@ async function main(): Promise<number> {
     console.log(renderCapture(snapshot));
     console.log(`Private snapshot saved: ${display(values.out)}`);
     return snapshot.capture.status === "complete" ? 0 : 2;
+  }
+  if (command === "inspect") {
+    if (args.length !== 1) throw new Error("inspect requires exactly one snapshot path.");
+    const snapshot = await readSnapshot(resolve(args[0]!));
+    const inspection = inspectSnapshot(snapshot, values.skill === undefined ? {} : { skill: values.skill });
+    console.log(values.json ? JSON.stringify(inspection, null, 2) : renderInspection(inspection));
+    return 0;
   }
   if (command === "diff") {
     if (args.length !== 2) throw new Error("diff requires exactly two snapshot paths.");
@@ -104,7 +113,7 @@ async function main(): Promise<number> {
     if (Boolean(values.preview) === Boolean(values.out)) throw new Error("Choose exactly one of --preview or --out FILE.");
     const snapshot = await readSnapshot(resolve(values.snapshot));
     const entries = snapshot.entries.filter(entry => values.entry ? entry.entryId === values.entry : entry.name === values.skill);
-    if (entries.length !== 1) throw new Error("Selection must match one entry. For duplicate names, use the entryId from your private snapshot with --entry.");
+    if (entries.length !== 1) throw new Error("Selection must match one entry. Run skillwhy inspect SNAPSHOT --skill NAME to find entry IDs, then select --entry ID.");
     const entry = entries[0]!;
     const bundle = createShareBundle(snapshot, { entryIds: [entry.entryId], alias: values.alias, includeName: values["include-name"] ?? false, includeDigest: values["include-digest"] ?? false });
     if (values.preview) console.log(JSON.stringify(bundle, null, 2));

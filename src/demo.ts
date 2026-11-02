@@ -1,4 +1,5 @@
 import type { Snapshot, SkillEntry } from "./types.js";
+import { VERSION } from "./version.js";
 
 function entry(enabled: boolean): SkillEntry {
   return {
@@ -13,7 +14,7 @@ function entry(enabled: boolean): SkillEntry {
 export function demoSnapshots(): [Snapshot, Snapshot] {
   const base: Snapshot = {
     schemaVersion: 1, artifactKind: "private-snapshot", snapshotId: "synthetic-maintainer",
-    capture: { host: "codex-cli", hostVersion: "0.166.0", adapterVersion: "0.1.0-alpha.1", surface: "fresh-cli-app-server", cwdAlias: "project", status: "complete", capturedAt: "2026-11-02T00:00:00.000Z", synthetic: true },
+    capture: { host: "codex-cli", hostVersion: "0.166.0", adapterVersion: VERSION, surface: "fresh-cli-app-server", cwdAlias: "project", status: "complete", capturedAt: "2026-11-02T00:00:00.000Z", synthetic: true },
     coverage: { inventory: "complete-for-request", includedEntries: "all-returned", roots: "known", resources: "not-collected", activeDesktop: "not-observed", loadedOrExecuted: "not-observed" },
     rootMappings: [{ alias: "project", role: "project", userConfirmed: true }],
     entries: [entry(true)], findings: [], errors: [],
