@@ -8,20 +8,22 @@ SkillWhy compares the skills that fresh Codex CLI processes discover. Capture tw
 
 ## Try the offline demo
 
-Requires Node.js 22 or later. From a checkout:
+Requires Node.js 22 or later and Git:
 
 ```sh
-npm ci
-npm run demo
+npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.2 demo
 ```
 
-Or run the compiled GitHub alpha package (not an npm registry release):
+The first run downloads and builds the tagged source. The demo uses synthetic snapshots. It needs no Codex installation, API key, or model call.
+
+To install the compiled GitHub release once and use the shorter `skillwhy` command:
 
 ```sh
-npx --yes --package https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.1/hyscodebase-skillwhy-0.1.0-alpha.1.tgz skillwhy demo
+npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.2/hyscodebase-skillwhy-0.1.0-alpha.2.tgz
+skillwhy demo
 ```
 
-The demo uses synthetic snapshots. It needs no Codex installation, API key, or model call.
+This is a GitHub release, not an npm registry publication. Release assets include a SHA-256 checksum. From a checkout, use `npm ci`, then `npm run demo`; replace `skillwhy` below with `node dist/src/cli.js`.
 
 ```text
 SkillWhy · skill discovery comparison
@@ -37,8 +39,10 @@ Existing Desktop session: NOT ASSESSED
 ## Capture and compare
 
 ```sh
-node dist/src/cli.js capture --agent codex --cwd ./my-project --out local.snapshot.json
-node dist/src/cli.js diff before.snapshot.json after.snapshot.json \
+skillwhy capture --cwd ./my-project --out before.snapshot.json --digest
+# After changing a skill or its configuration, capture the same project again:
+skillwhy capture --cwd ./my-project --out after.snapshot.json --digest
+skillwhy diff before.snapshot.json after.snapshot.json \
   --map-root project=project --detail
 ```
 
@@ -50,15 +54,18 @@ Optional `--digest` fingerprints only `SKILL.md` files within the selected proje
 
 ## Share one selected skill
 
+Inspect the snapshot to find the entry to share. Replace `release-review` with your skill's name. Duplicate names appear with separate IDs:
+
 ```sh
-node dist/src/cli.js share --snapshot local.snapshot.json \
+skillwhy inspect after.snapshot.json --skill release-review
+skillwhy share --snapshot after.snapshot.json \
   --skill release-review --alias review --preview
-node dist/src/cli.js share --snapshot local.snapshot.json \
+skillwhy share --snapshot after.snapshot.json \
   --skill release-review --alias review --out local.share.json
-node dist/src/cli.js diff maintainer.share.json local.share.json --detail
+skillwhy diff maintainer.share.json local.share.json --detail
 ```
 
-Use the same explicit alias only for entries you have confirmed correspond. If names are duplicated, select an `--entry` ID from your private snapshot. This alpha exports one entry per bundle.
+Use the same explicit alias only for entries you have confirmed correspond. If names are duplicated, replace `--skill release-review` with `--entry ENTRY_ID` from `inspect`. This alpha exports one entry per bundle. `inspect` is a local view: it includes skill names and relative locations, so use `share --preview` for the file you intend to send.
 
 By default, bundles exclude skill names, bodies, descriptions, source paths, fingerprints, logs, and unselected entries. `--include-name` and `--include-digest` are explicit opt-ins. Preview the file before sharing it yourself; the tool never uploads it. See [data handling](docs/privacy.md).
 
@@ -86,6 +93,10 @@ npm test
 npm run typecheck
 ```
 
-No runtime dependencies. Tests use synthetic records and local fake subprocesses; live compatibility observations are documented separately. [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [한국어](docs/README.ko.md) · [Roadmap](docs/roadmap.md)
+No runtime dependencies. Tests use synthetic records and local fake subprocesses; [live compatibility observations](docs/validation.md) are documented separately. Tag releases run the test matrix, install the packaged CLI in a temporary directory, and publish the tarball with its checksum; see [release maintenance](docs/releasing.md).
+
+Try the [10-minute pilot](docs/pilot.md) to report installation friction or a useful support case. External pilot outcomes have not yet been established.
+
+[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [한국어](docs/README.ko.md) · [Roadmap](docs/roadmap.md)
 
 MIT licensed. No default telemetry, accounts, or hosted service.

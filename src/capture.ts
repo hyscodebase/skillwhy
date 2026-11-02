@@ -4,9 +4,10 @@ import { createHash, randomUUID } from "node:crypto";
 import { basename, delimiter, dirname, isAbsolute, join, normalize, relative, resolve, sep } from "node:path";
 import type { CaptureOptions, SkillEntry, Snapshot } from "./types.js";
 import { CaptureFailure, isRecord, probeVersion, querySkills } from "./protocol.js";
+import { VERSION } from "./version.js";
 
 export const SUPPORTED_CODEX_VERSION = "0.166.0";
-export const ADAPTER_VERSION = "0.1.0-alpha.1";
+export const ADAPTER_VERSION = VERSION;
 const MAX_FILE_BYTES = 2 * 1024 * 1024;
 // Keep room for the project root if every returned entry has a different external root.
 const MAX_ENTRIES = 9_999;

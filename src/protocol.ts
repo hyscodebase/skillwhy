@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import { StringDecoder } from "node:string_decoder";
+import { VERSION } from "./version.js";
 
 export class CaptureFailure extends Error {
   constructor(readonly code: string) {
@@ -219,7 +220,7 @@ export function querySkills(options: ProcessOptions): Promise<NativeObservation>
     child.on("exit", () => { exited = true; });
     child.on("close", finish);
     send({ id: 1, method: "initialize", params: {
-      clientInfo: { name: "skillwhy", title: "SkillWhy", version: "0.1.0-alpha.1" },
+      clientInfo: { name: "skillwhy", title: "SkillWhy", version: VERSION },
     } });
   });
 }

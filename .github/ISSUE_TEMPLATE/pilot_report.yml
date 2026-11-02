@@ -1,0 +1,66 @@
+name: Pilot feedback
+description: Optional, sanitized feedback from a short demo or live capture attempt.
+title: "[Pilot] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for trying the [10-minute pilot](https://github.com/hyscodebase/skillwhy/blob/main/docs/pilot.md).
+        External pilot baseline on 2026-11-02: **0 completed pilots recorded**; no adoption or time-saving result is established.
+        This issue will be public. Share only a summary you choose to publish, not raw snapshots, configuration, skill bodies, private paths, API keys, or logs. No attachment is needed.
+  - type: dropdown
+    id: pilot_mode
+    attributes:
+      label: What did you try?
+      options:
+        - Offline synthetic demo only
+        - Live capture on Codex 0.166.0 and macOS arm64
+        - Blocked before reaching live capture
+    validations:
+      required: true
+  - type: textarea
+    id: runtime
+    attributes:
+      label: Runtime versions
+      description: Version numbers only. Write "not used" for Codex in a demo-only attempt.
+      placeholder: |
+        SkillWhy:
+        Node.js:
+        OS version and architecture:
+        Codex CLI:
+    validations:
+      required: true
+  - type: input
+    id: first_result
+    attributes:
+      label: First result and approximate elapsed time
+      description: Include installation time. An estimate or "did not reach a result" is fine; distinguish demo from live results.
+      placeholder: "Demo in about 3 minutes; selected share preview not reached."
+    validations:
+      required: true
+  - type: textarea
+    id: experience
+    attributes:
+      label: What helped, or where did you get stuck?
+      description: Describe the problem you wanted to investigate, the last step reached, and whether the output helped. Use a short sanitized summary, not raw terminal output.
+      placeholder: "I wanted to investigate ...; I reached install/demo/capture/inspect/share preview/comparison; the result helped/did not help because ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: reuse
+    attributes:
+      label: Would you use this again for a similar problem?
+      options:
+        - "Yes"
+        - "Maybe"
+        - "No"
+        - Not enough information yet
+    validations:
+      required: true
+  - type: checkboxes
+    id: publication_choice
+    attributes:
+      label: Your publication choice
+      options:
+        - label: I choose to publish this reviewed summary and have excluded private snapshots, configuration, skill bodies, private paths, and secrets.
+          required: true

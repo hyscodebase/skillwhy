@@ -7,6 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { demoSnapshots } from "../src/demo.js";
+import { VERSION } from "../src/version.js";
 
 const execute = promisify(execFile);
 const cli = fileURLToPath(new URL("../src/cli.js", import.meta.url));
@@ -30,11 +31,40 @@ test("offline demo is explicitly synthetic and detects the disabled entry", asyn
 });
 
 test("bad arguments consistently fail with exit 2", async () => {
-  for (const args of [["nope"], ["demo", "--out", "ignored.json"], ["--unrecognized"], ["diff", "only-one"], ["capture", "--cwd", "."]]) {
+  for (const args of [["nope"], ["demo", "--out", "ignored.json"], ["--unrecognized"], ["diff", "only-one"], ["capture", "--cwd", "."], ["inspect"], ["inspect", "one", "two"], ["inspect", "one", "--include-name"]]) {
     const result = await run(args);
     assert.equal(result.code, 2, `${args.join(" ")}: ${result.stderr}`);
     assert.doesNotMatch(result.stderr, /at main|node:internal/);
   }
+});
+
+test("CLI and adapter versions use the package metadata", async () => {
+  const result = await run(["--version"]);
+  assert.equal(result.code, 0, result.stderr);
+  assert.equal(result.stdout.trim(), VERSION);
+  assert.equal(demoSnapshots()[0].capture.adapterVersion, VERSION);
+});
+
+test("inspect finds duplicate entry IDs without exposing raw source paths or digests", async () => {
+  const dir = await realpath(await mkdtemp(join(tmpdir(), "skillwhy-inspect-cli-")));
+  try {
+    const [snapshot] = demoSnapshots();
+    const entry = snapshot.entries[0]!;
+    entry.sourcePath = "/private/INSPECT_PATH_CANARY/SKILL.md";
+    snapshot.entries.push({ ...structuredClone(entry), entryId: "second-copy", locationAlias: "project/another/SKILL.md" });
+    const source = join(dir, "source.json");
+    await writeFile(source, JSON.stringify(snapshot));
+    const result = await run(["inspect", source, "--skill", "release-review", "--json"]);
+    assert.equal(result.code, 0, result.stderr);
+    const value = JSON.parse(result.stdout);
+    assert.deepEqual(value.entries.map((item: { entryId: string }) => item.entryId), ["demo-entry", "second-copy"]);
+    assert.doesNotMatch(result.stdout, /INSPECT_PATH_CANARY|a{64}/);
+    const selected = await run(["share", "--snapshot", source, "--entry", value.entries[1].entryId, "--alias", "review", "--preview"]);
+    assert.equal(selected.code, 0, selected.stderr);
+    const ambiguous = await run(["share", "--snapshot", source, "--skill", "release-review", "--alias", "review", "--preview"]);
+    assert.equal(ambiguous.code, 2);
+    assert.match(ambiguous.stderr, /skillwhy inspect/);
+  } finally { await rm(dir, { recursive: true, force: true }); }
 });
 
 test("share CLI exports the preview, refuses overwrite, and supports common selected comparison", async () => {

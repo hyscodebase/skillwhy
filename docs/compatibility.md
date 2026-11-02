@@ -7,6 +7,13 @@ The initial adapter targets **Codex CLI 0.166.0 on macOS arm64**. Other versions
 platforms produce an `unsupported` snapshot instead of silently guessing. This is
 an early alpha, not a promise that every configuration on that combination works.
 
+Actual alpha.2 metadata conformance runs passed on this combination with Node.js
+**22.20.0** and **24.8.0**. They covered duplicate names, an explicitly disabled
+temporary skill, a missing-description error, and capture → diff → share.
+See the [validation record](validation.md) for exact fixtures, timestamps,
+reproduction commands, and limits. This evidence does not add another supported
+Codex version or operating system.
+
 The adapter requests a fresh process's `skills/list` response. It does not attach
 to an existing Desktop chat or read a model transcript. The native result does not
 prove that a skill's description reached the model, that its body was read, or that
@@ -26,5 +33,17 @@ same-name skills are not universally merged into a single winner.
 - A native live smoke check does not replace the entire compatibility suite or
   validate model invocation, Desktop state, or every plugin backend.
 
+A `complete` capture reports completion of the requested native inventory, not
+strict YAML/skill-specification validation. The host may accept metadata forms
+that a separate linter rejects. Only errors returned by the host or detected by
+the capture adapter can affect that status; SkillWhy does not independently lint
+every SKILL.md.
+
 Do not broaden the support manifest just because a newer version parses. Add
 schema and discovery-semantic tests for that version first.
+
+The opt-in `scripts/native-conformance.mjs --live` uses temporary fixtures and a
+per-process configuration override, without editing user settings. It inherits
+the current Codex environment and is not a network-isolation or managed-policy
+test. A passing default CI job validates offline and fake-process behavior;
+**it is not evidence of live Codex support on each CI operating system**.
