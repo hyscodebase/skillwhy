@@ -17,8 +17,10 @@ reproduction commands, and limits. Linux x64 was admitted after reviewing both
 Node versions in the live Ubuntu 24.04
 [candidate run](https://github.com/hyscodebase/skillwhy/actions/runs/41456035667).
 The original Linux build still returned `unsupported` in that run; the ten cases
-passed through its explicitly labeled temporary candidate copy. A subsequent
-`supported` run checks the admitted, unmodified production build.
+passed through its explicitly labeled temporary candidate copy. The subsequent
+[production run](https://github.com/hyscodebase/skillwhy/actions/runs/41457521197)
+also passed all ten checks under both Node versions using the admitted,
+unmodified production build.
 
 The adapter requests a fresh process's `skills/list` response. It does not attach
 to an existing Desktop chat or read a model transcript. The native result does not
