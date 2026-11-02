@@ -22,11 +22,12 @@ const payload = (skills: unknown[], errors: unknown[] = []) => ({ data: [{ cwd: 
 
 test("production native support remains restricted to reviewed combinations", () => {
   assert.equal(isSupportedNativeHost("0.166.0", "darwin", "arm64"), true);
-  assert.equal(isSupportedNativeHost("0.166.0", "linux", "x64"), false);
+  assert.equal(isSupportedNativeHost("0.166.0", "linux", "x64"), true);
+  assert.equal(isSupportedNativeHost("0.166.0", "linux", "arm64"), false);
   assert.equal(isSupportedNativeHost("0.166.0", "darwin", "x64"), false);
   assert.equal(isSupportedNativeHost("0.166.0", "win32", "x64"), false);
   assert.equal(isSupportedNativeHost("0.167.0", "darwin", "arm64"), false);
-  assert.equal(supportedNativeHostLabel(), "Codex CLI 0.166.0 on macOS arm64");
+  assert.equal(supportedNativeHostLabel(), "Codex CLI 0.166.0 on macOS arm64; Codex CLI 0.166.0 on Linux x64");
 });
 
 test("normalization preserves duplicate names and omits content/dependency fields", () => {
@@ -141,7 +142,7 @@ test("unsupported version never starts app-server", async (t) => {
   await assert.rejects(readFile(join(root, "UNEXPECTED_START")));
 });
 
-test("capture normalizes a fake native session and keeps optional digests scoped", { skip: process.platform !== "darwin" || process.arch !== "arm64" }, async (t) => {
+test("capture normalizes a fake native session and keeps optional digests scoped", { skip: !isSupportedNativeHost("0.166.0") }, async (t) => {
   const root = await tempRoot(t);
   const skillPath = join(root, ".agents", "skills", "deploy", "SKILL.md");
   await mkdir(join(root, ".agents", "skills", "deploy"), { recursive: true });

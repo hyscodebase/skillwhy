@@ -3,16 +3,22 @@
 SkillWhy's offline comparison, demo, and sharing use Node.js 22 or later. Native
 capture is a separate compatibility surface.
 
-The initial adapter targets **Codex CLI 0.166.0 on macOS arm64**. Other versions or
-platforms produce an `unsupported` snapshot instead of silently guessing. This is
-an early alpha, not a promise that every configuration on that combination works.
+Native capture admits **Codex CLI 0.166.0 on macOS arm64 and Linux x64**. Linux
+evidence covers **Ubuntu 24.04 x64**, not every Linux distribution. Other CLI
+versions or platform/architecture combinations produce an `unsupported` snapshot
+instead of silently guessing. This is an early alpha, not a promise that every
+configuration on an admitted combination works.
 
-Actual alpha.2 metadata conformance runs passed on this combination with Node.js
+Actual alpha.2 metadata conformance runs passed on macOS arm64 with Node.js
 **22.20.0** and **24.8.0**. They covered duplicate names, an explicitly disabled
 temporary skill, a missing-description error, and capture → diff → share.
 See the [validation record](validation.md) for exact fixtures, timestamps,
-reproduction commands, and limits. This evidence does not add another supported
-Codex version or operating system.
+reproduction commands, and limits. Linux x64 was admitted after reviewing both
+Node versions in the live Ubuntu 24.04
+[candidate run](https://github.com/hyscodebase/skillwhy/actions/runs/41456035667).
+The original Linux build still returned `unsupported` in that run; the ten cases
+passed through its explicitly labeled temporary candidate copy. A subsequent
+`supported` run checks the admitted, unmodified production build.
 
 The adapter requests a fresh process's `skills/list` response. It does not attach
 to an existing Desktop chat or read a model transcript. The native result does not
@@ -48,24 +54,26 @@ the current Codex environment and is not a network-isolation or managed-policy
 test. A passing default CI job validates offline and fake-process behavior;
 **it is not evidence of live Codex support on each CI operating system**.
 
-## Candidate platform checks
+## Native verification and candidate history
 
-Production decisions are centralized in `src/compatibility.ts`. Codex
-0.166.0/Linux x64 is currently an unapproved candidate; normal capture still
-returns `unsupported` there.
+Production decisions are centralized in `src/compatibility.ts`. The two verified
+Linux candidate summaries are preserved in
+[the validation record](validation.md#alpha3-native-support-investigation).
 
-The source-checkout script accepts `--candidate linux-x64` only on Linux x64.
-It checks the original CLI's unsupported result, then runs the live fixture suite
-against a temporary copy of the build with one compatibility-predicate override.
+Before admission, the source-checkout script's `--candidate linux-x64` mode
+checked the original CLI's unsupported result and then ran the fixture suite
+against a temporary copy with one compatibility-predicate override. Now that the
+tuple is reviewed, that experimental mode refuses it with
+`CANDIDATE_ALREADY_SUPPORTED` on Linux x64. Use the ordinary `--live` command.
 There is no candidate flag or environment-variable bypass in the shipped CLI.
-The report labels this as `temporary-candidate`; it must not be presented as a
-production compatibility result.
+Historical `temporary-candidate` reports remain labeled as such.
 
 The manually dispatched `Native conformance (opt-in)` workflow installs exactly
 `@openai/codex@0.166.0` on Ubuntu 24.04 x64 and runs Node 22.20.0 and 24.8.0. Its
-`candidate-linux-x64` mode tests this temporary copy. The `supported` mode instead
-tests the unmodified production manifest and should fail on unapproved hosts.
-Only sanitized successful summaries are uploaded, with the source revision.
+default `supported` mode tests the unmodified production manifest and should fail
+on unapproved hosts. The historical candidate mode is retained but rejects this
+already reviewed tuple. Only sanitized successful summaries are uploaded, with
+the source revision.
 
 Review both native job results, their ten fixture outcomes, and any limitations
 before adding a production tuple. Keep unsupported versions and architectures

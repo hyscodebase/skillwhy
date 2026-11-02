@@ -10,6 +10,8 @@ export interface NativeHost {
 // Candidate experiments alter a temporary build, never this production manifest.
 export const SUPPORTED_NATIVE_HOSTS: readonly Readonly<NativeHost>[] = Object.freeze([
   Object.freeze({ version: SUPPORTED_CODEX_VERSION, platform: "darwin" as const, arch: "arm64" }),
+  // Ubuntu 24.04 x64: reviewed native run 41456035667, Node 22.20.0 and 24.8.0.
+  Object.freeze({ version: SUPPORTED_CODEX_VERSION, platform: "linux" as const, arch: "x64" }),
 ]);
 
 export function isSupportedNativeHost(

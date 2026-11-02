@@ -17,11 +17,11 @@
 
 ### 한국어
 
-> 안녕하세요. SkillWhy를 만드는 홍유석입니다. [프로젝트의 문서/이슈 링크]에서 [직접 확인한 discovery 관련 내용]을 읽었습니다. 저는 fresh Codex CLI가 반환하는 skill 정보를 비교하고, 선택한 한 항목의 최소 진단 파일을 만드는 작은 OSS를 개발하고 있습니다. 이 방식이 실제 지원 과정에 필요한지 10분 정도 의견을 듣고 싶습니다. 현재 live capture는 Codex CLI 0.166.0 / macOS arm64만 지원하며, 다른 환경에서는 API 키 없이 합성 데모만 보셔도 됩니다. 원본 설정이나 snapshot을 보내실 필요는 없습니다. 관심이 있으시면 편한 방식으로 알려주세요. [파일럿 안내](https://github.com/hyscodebase/skillwhy/blob/main/docs/pilot.md)
+> 안녕하세요. SkillWhy를 만드는 홍유석입니다. [프로젝트의 문서/이슈 링크]에서 [직접 확인한 discovery 관련 내용]을 읽었습니다. 저는 fresh Codex CLI가 반환하는 skill 정보를 비교하고, 선택한 한 항목의 최소 진단 파일을 만드는 작은 OSS를 개발하고 있습니다. 이 방식이 실제 지원 과정에 필요한지 10분 정도 의견을 듣고 싶습니다. 현재 live capture는 Codex CLI 0.166.0 / macOS arm64·Linux x64를 지원하며(Linux 검증은 Ubuntu 24.04), 다른 환경에서는 API 키 없이 합성 데모만 보셔도 됩니다. 원본 설정이나 snapshot을 보내실 필요는 없습니다. 관심이 있으시면 편한 방식으로 알려주세요. [파일럿 안내](https://github.com/hyscodebase/skillwhy/blob/main/docs/pilot.md)
 
 ### English
 
-> Hi, I'm Yuseok, the maintainer of SkillWhy. I read [specific discovery detail] in [your project's document/issue]. I'm building a small OSS tool to compare the skill metadata returned by fresh Codex CLI processes and prepare a minimal support file for one selected entry. I'd value ten minutes of feedback on whether that helps your support workflow. Live capture currently supports only Codex CLI 0.166.0 on macOS arm64; the synthetic demo needs no Codex or API key. You don't need to send any raw configuration or snapshots. If this is relevant, you're welcome to try the [pilot](https://github.com/hyscodebase/skillwhy/blob/main/docs/pilot.md) or reply in whichever format suits you.
+> Hi, I'm Yuseok, the maintainer of SkillWhy. I read [specific discovery detail] in [your project's document/issue]. I'm building a small OSS tool to compare the skill metadata returned by fresh Codex CLI processes and prepare a minimal support file for one selected entry. I'd value ten minutes of feedback on whether that helps your support workflow. Live capture currently supports Codex CLI 0.166.0 on macOS arm64 and Linux x64 (native Linux checks use Ubuntu 24.04); the synthetic demo needs no Codex or API key. You don't need to send any raw configuration or snapshots. If this is relevant, you're welcome to try the [pilot](https://github.com/hyscodebase/skillwhy/blob/main/docs/pilot.md) or reply in whichever format suits you.
 
 후보별 첫 문장은 실제 관찰에 한정한다. C01에는 이미 존재하는 native verifier를
 인정하고 작은 비교·공유 흐름의 필요성을 묻는다. C02·C05에는 Desktop 문제를
@@ -50,7 +50,7 @@ CLI 도구가 해결했다고 연결하지 않는다. C03에는 installer 문제
 >
 > 새 Codex CLI 프로세스가 반환한 목록을 저장하고, 활성 상태·수집한 SKILL.md fingerprint 등의 차이를 보여줍니다. 지원 요청에는 전체 설정 대신 직접 고른 한 항목의 최소 파일을 만들 수 있습니다. 기본 공유 파일에는 이름·경로·본문·fingerprint가 제외되며 자동 업로드는 없습니다.
 >
-> 현재 live capture는 **Codex CLI 0.166.0 / macOS arm64**만 지원합니다. 기존 Desktop 세션이나 모델의 실제 skill 선택·실행은 검사하지 않습니다. Node.js 22+와 Git이 있으면 다음 합성 데모를 실행할 수 있습니다. 최초 실행에는 다운로드와 빌드가 필요하고, 데모에는 Codex나 API 키가 필요하지 않습니다.
+> 현재 live capture는 **Codex CLI 0.166.0 / macOS arm64·Linux x64**를 지원합니다. Linux에서 실제 검증한 환경은 Ubuntu 24.04입니다. 기존 Desktop 세션이나 모델의 실제 skill 선택·실행은 검사하지 않습니다. Node.js 22+와 Git이 있으면 다음 합성 데모를 실행할 수 있습니다. 최초 실행에는 다운로드와 빌드가 필요하고, 데모에는 Codex나 API 키가 필요하지 않습니다.
 >
 > `npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo`
 >
@@ -74,7 +74,7 @@ CLI 도구가 해결했다고 연결하지 않는다. C03에는 installer 문제
 >
 > The implementation is TypeScript with no runtime dependencies. One deliberate boundary is that discovery does not prove a model selected, read, or executed a skill. SkillWhy also does not inspect an existing Desktop session or choose a winner among same-name copies.
 >
-> Live capture currently supports **Codex CLI 0.166.0 on macOS arm64 only**. For a synthetic demo, you need Node.js 22+ and Git, but no Codex installation or API key:
+> Live capture currently supports **Codex CLI 0.166.0 on macOS arm64 and Linux x64**, with Linux native checks on Ubuntu 24.04. For a synthetic demo, you need Node.js 22+ and Git, but no Codex installation or API key:
 >
 > `npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo`
 >

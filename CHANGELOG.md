@@ -14,6 +14,9 @@
   namespace owner's account setup and a successful real publication.
 - Add opt-in candidate native conformance, keeping experimental combinations
   separate from the production support manifest.
+- Extend Codex 0.166.0 native capture to Linux x64 after actual candidate
+  conformance on Ubuntu 24.04 with Node 22.20.0 and 24.8.0. Preserve the sanitized
+  run evidence and check the promoted production manifest separately.
 - Prepare maintainer interviews, public-source pilot candidates, and reviewed
   outreach drafts. External responses and useful-case outcomes remain pending.
 - Add weekly public GitHub aggregate reports and a separate manual evidence

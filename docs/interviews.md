@@ -32,7 +32,7 @@
 ## 파일럿 종료와 성공을 따로 판정하기
 
 실행 명령은 중복 복사하지 않고 [pilot.md](pilot.md)를 따른다. 현재 native capture는
-**Codex CLI 0.166.0 / macOS arm64**에 한정된다. 다른 환경에서는 합성 demo 피드백으로
+**Codex CLI 0.166.0 / macOS arm64·Linux x64**를 지원한다. Linux 검증 환경은 Ubuntu 24.04다. 다른 환경에서는 합성 demo 피드백으로
 끝낸다. 파일럿 때문에 Codex 설치·업그레이드·다운그레이드를 요구하지 않는다.
 
 | 분류 | 완료 기준 | 유용한 실제 사례로 집계? |

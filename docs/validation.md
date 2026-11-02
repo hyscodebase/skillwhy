@@ -13,9 +13,10 @@ suite passed again against Codex 0.166.0:
 | 0.1.0-alpha.3 | 22.20.0 | Production | 2026-11-02 13:28:20 | Ten reported checks passed. |
 | 0.1.0-alpha.3 | 24.8.0 | Production | 2026-11-02 13:30:46 | Ten reported checks passed. |
 
-Linux x64 is a **candidate**, not a supported production combination. The exact
-`@openai/codex@0.166.0` package declares a pinned Linux x64 native package. Package
-availability and schema parsing alone are not evidence of working discovery.
+Linux x64 was admitted to the production manifest after review of the live
+Ubuntu 24.04 x64 candidate results below. The exact `@openai/codex@0.166.0` package
+and its normal npm launcher were used. Package availability and schema parsing
+alone were not used as evidence of working discovery.
 
 An initial Docker `linux/amd64` run on Apple Silicon used Node 22.20.0 and that
 exact package. The native phase ran with `--network none`, a read-only root, and
@@ -24,26 +25,37 @@ temporary writable directories, after package installation. It failed with
 not relax capture completion rules, grant Linux support, or establish whether
 emulation, the npm launcher, or another shutdown behavior caused the result.
 
-The separate, opt-in
-[native workflow](https://github.com/hyscodebase/skillwhy/blob/main/.github/workflows/native-conformance.yml)
-is intended to resolve this on an Ubuntu 24.04 x64 runner, with Node 22.20.0 and
-24.8.0. Remote candidate evidence is still pending; a workflow definition is not
-a passing result.
+The separate, opt-in [native workflow run 41456035667](https://github.com/hyscodebase/skillwhy/actions/runs/41456035667)
+completed successfully on Ubuntu 24.04 x64 at source commit
+`edba794da48015dfff0c31c87a8ab9423c6ac32e`:
 
-Its candidate mode first checks that the original CLI returns `unsupported`.
-It then copies the compiled CLI to a temporary directory and replaces only that
+| Node.js | Checked at (UTC) | Build mode | Result and preserved summary |
+| --- | --- | --- | --- |
+| 22.20.0 | 2026-11-02 13:47:57 | Temporary candidate | [Ten checks passed](native-evidence/candidate-run-41456035667-node-22.20.0.json). |
+| 24.8.0 | 2026-11-02 13:47:53 | Temporary candidate | [Ten checks passed](native-evidence/candidate-run-41456035667-node-24.8.0.json). |
+
+Both downloaded artifacts contained exactly one `native-summary.json`. Each was
+checked for the fixed 15-field shape, exact CLI/adapter/runtime versions, source
+commit, Linux x64 platform, ten expected cases, and `productionSupported: false`.
+These public-safe summaries are retained here because Actions artifacts expire.
+They contain no raw inventory, user paths, settings, prompts, or native stderr.
+The artifacts were 13145699934 (Node 22) and 13147151229 (Node 24).
+
+The candidate mode first checked that the original CLI returned `unsupported`.
+It then copied the compiled CLI to a temporary directory and replaced only that
 copy's compatibility predicate to admit Codex 0.166.0/Linux x64. The same ten live
-fixture checks run through this copy. Production source and the original build
-remain unchanged. Reports identify `temporary-candidate`, the exact versions,
-and the workflow commit. Only a successful sanitized JSON summary is uploaded;
-raw inventories, private snapshots, stderr, and user settings are excluded.
+fixture checks ran through this copy; production source and the original build
+were unchanged. These are candidate results, not unmodified-production results.
+After manifest admission, the workflow defaults to `supported`; its production
+verification run remains to be recorded separately.
 
 This workflow is manually dispatched, uses no supplied login or model API
 credentials, and requests no model turns. It is separate from the default CI
-matrix. Native startup in the workflow is not network-isolated, and a successful
-result would cover these fixtures rather than all Linux distributions or managed
-configurations. A maintainer must review actual run artifacts before changing
-the production manifest.
+matrix. Native startup in the workflow is not network-isolated. These successful
+results cover Ubuntu 24.04 x64 and the listed fixtures rather than all Linux
+distributions or managed configurations. The normal npm launcher passed here,
+so the earlier emulation failure does not establish a general launcher defect;
+its precise cause remains undetermined.
 
 ## Alpha.2 native conformance
 
@@ -147,8 +159,9 @@ private snapshots, schema dumps, and node_modules.
 
 ## Still unverified
 
-- Live capture on other Codex versions, OS/architecture combinations, or Node
-  releases beyond the two recorded above.
+- Live capture on other Codex versions, Linux distributions beyond Ubuntu 24.04,
+  other OS/architecture combinations, or Node releases beyond the two recorded
+  above.
 - Model selection, skill execution, performance improvement, or Desktop state.
 - All managed settings, plugin backends, and remote environments.
 - External user onboarding, real support-case impact, and repeat adoption.

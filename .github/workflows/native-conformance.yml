@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Candidate uses a temporary build; supported tests the production manifest.
+        description: Supported tests the production manifest; candidate rejects reviewed tuples.
         type: choice
         options:
           - candidate-linux-x64
           - supported
-        default: candidate-linux-x64
+        default: supported
         required: true
 
 permissions:
