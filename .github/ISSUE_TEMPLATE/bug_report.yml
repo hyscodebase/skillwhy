@@ -1,0 +1,22 @@
+name: Bug report
+description: Report a reproducible discovery or comparison problem.
+body:
+  - type: markdown
+    attributes:
+      value: Please use synthetic examples or a reviewed share bundle. Do not attach private snapshots, skill bodies, credentials, or raw logs.
+  - type: input
+    attributes:
+      label: SkillWhy, Codex, Node, and OS versions
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction and expected observation
+      description: Include the command and a minimal sanitized input. Distinguish a fresh CLI from an existing Desktop session.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual result
+    validations:
+      required: true

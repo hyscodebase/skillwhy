@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.skillwhy/
+*.snapshot.json
+*.share.json
+*.tgz
+coverage/
+.DS_Store
+.env
+.env.*

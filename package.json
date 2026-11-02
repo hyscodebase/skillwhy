@@ -1,0 +1,21 @@
+{
+  "name": "@hyscodebase/skillwhy",
+  "version": "0.1.0-alpha.1",
+  "description": "Compare the skills your Codex CLI environments actually discover.",
+  "type": "module",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/hyscodebase/skillwhy.git" },
+  "homepage": "https://github.com/hyscodebase/skillwhy#readme",
+  "bugs": "https://github.com/hyscodebase/skillwhy/issues",
+  "engines": { "node": ">=22" },
+  "bin": { "skillwhy": "dist/src/cli.js" },
+  "files": ["dist/src", "README.md", "LICENSE", "CONTRIBUTING.md", "SECURITY.md", "docs"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "prepare": "npm run build",
+    "demo": "npm run build && node dist/src/cli.js demo"
+  },
+  "devDependencies": { "typescript": "5.9.3", "@types/node": "22.20.5" }
+}
