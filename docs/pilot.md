@@ -17,7 +17,8 @@ from live native observations.** Note your approximate time to first success.
 
 ## 2. Try your own snapshot, if already supported (about 5 minutes)
 
-Live capture supports **Codex CLI 0.166.0 on macOS arm64 only**. Check your existing
+Live capture supports **Codex CLI 0.166.0 on macOS arm64 and Linux x64**
+(Linux native checks use Ubuntu 24.04). Check your existing
 environment with `codex --version`; use `node --version` and
 `node -p "process.platform + '/' + process.arch"` for the other runtime details.
 If unsupported or absent, finish with demo feedback. Do not install, upgrade, or

@@ -70,3 +70,12 @@ stay visible as unknown; the script does not increase token permissions.
 Sources: GitHub's [repository API](https://docs.github.com/en/rest/repos/repos#get-a-repository),
 [issues API](https://docs.github.com/en/rest/issues/issues#list-repository-issues), and
 [release assets API](https://docs.github.com/en/rest/releases/assets#list-release-assets).
+
+## First hosted observation
+
+The [first manual workflow run](https://github.com/hyscodebase/skillwhy/actions/runs/41456039961)
+completed successfully. Its observation window was 2026-11-02 13:47:44–13:47:45 UTC.
+The downloaded JSON artifact recorded 0 stars, 0 forks, 0 external pilot issues,
+and 3 release-tarball download requests across two prereleases. The manual
+register contained 0 records; actual use, repeat use, and helpfulness remained
+unknown. These are a dated baseline, not current totals or adoption outcomes.
