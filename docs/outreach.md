@@ -50,7 +50,7 @@ CLI 도구가 해결했다고 연결하지 않는다. C03에는 installer 문제
 >
 > 새 Codex CLI 프로세스가 반환한 목록을 저장하고, 활성 상태·수집한 SKILL.md fingerprint 등의 차이를 보여줍니다. 지원 요청에는 전체 설정 대신 직접 고른 한 항목의 최소 파일을 만들 수 있습니다. 기본 공유 파일에는 이름·경로·본문·fingerprint가 제외되며 자동 업로드는 없습니다.
 >
-> 현재 live capture는 **Codex CLI 0.166.0 / macOS arm64·Linux x64**를 지원합니다. Linux에서 실제 검증한 환경은 Ubuntu 24.04입니다. 기존 Desktop 세션이나 모델의 실제 skill 선택·실행은 검사하지 않습니다. Node.js 22+와 Git이 있으면 다음 합성 데모를 실행할 수 있습니다. 최초 실행에는 다운로드와 빌드가 필요하고, 데모에는 Codex나 API 키가 필요하지 않습니다.
+> 현재 live capture는 **Codex CLI 0.166.0 / macOS arm64·Linux x64**를 지원합니다. Linux에서 실제 검증한 환경은 Ubuntu 24.04입니다. 기존 Desktop 세션이나 모델의 실제 skill 선택·실행은 검사하지 않습니다. Node.js 22+가 있으면 다음 합성 데모를 실행할 수 있습니다. 최초 실행에는 빌드된 npm 패키지를 다운로드하며, 데모에는 Codex나 API 키가 필요하지 않습니다.
 >
 > `npx --yes @hyscodebase/skillwhy@alpha demo`
 >
@@ -74,11 +74,11 @@ CLI 도구가 해결했다고 연결하지 않는다. C03에는 installer 문제
 >
 > The implementation is TypeScript with no runtime dependencies. One deliberate boundary is that discovery does not prove a model selected, read, or executed a skill. SkillWhy also does not inspect an existing Desktop session or choose a winner among same-name copies.
 >
-> Live capture currently supports **Codex CLI 0.166.0 on macOS arm64 and Linux x64**, with Linux native checks on Ubuntu 24.04. For a synthetic demo, you need Node.js 22+ and Git, but no Codex installation or API key:
+> Live capture currently supports **Codex CLI 0.166.0 on macOS arm64 and Linux x64**, with Linux native checks on Ubuntu 24.04. For a synthetic demo, you need Node.js 22+, but no Codex installation or API key:
 >
 > `npx --yes @hyscodebase/skillwhy@alpha demo`
 >
-> The first run downloads and builds the tagged source. Code and instructions: https://github.com/hyscodebase/skillwhy
+> The first run downloads the compiled npm package. Code and instructions: https://github.com/hyscodebase/skillwhy
 >
 > There are no completed external pilots yet. I'd appreciate feedback on whether the result makes observed differences and unknowns clear. If you've had a similar support problem, what information was missing from your existing tools? No raw snapshots or private configuration are needed.
 >
