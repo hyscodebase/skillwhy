@@ -6,6 +6,30 @@ export function display(value: unknown): string {
   return String(value ?? "unknown").replace(/[\u0000-\u001f\u007f-\u009f\u202a-\u202e\u2066-\u2069]/g, " ");
 }
 
+/** Keep the built-in onboarding example separate from real diagnostic reports. */
+export function renderDemo(result: Comparison, detail = false): string {
+  const next = [
+    "Next: run this from your own project with a supported Codex CLI:",
+    "  npx --yes @hyscodebase/skillwhy@alpha capture --cwd . --out before.snapshot.json",
+  ];
+  if (detail || !result.synthetic) return [renderComparison(result, detail), "", ...next].join("\n");
+  const lines = [
+    `SkillWhy · demo ${result.status}`,
+    "Synthetic example; your project was not scanned.",
+    "",
+  ];
+  for (const difference of result.differences) {
+    const label = display(difference.key.replace(/^key:demo:/, ""));
+    const value = (input: unknown): string => difference.kind === "enabled-changed" && typeof input === "boolean"
+      ? input ? "enabled" : "disabled" : display(input);
+    lines.push(`${label}: ${value(difference.before)} → ${value(difference.after)}`);
+  }
+  lines.push("", `${result.differences.length} difference${result.differences.length === 1 ? "" : "s"} between two sample snapshots.`,
+    "Scope: discovery metadata. No model or Desktop session was inspected.",
+    "", ...next, "", "Full explanation: npx --yes @hyscodebase/skillwhy@alpha demo --detail");
+  return lines.join("\n");
+}
+
 export function renderComparison(result: Comparison, detail = false): string {
   const lines = [
     "SkillWhy · skill discovery comparison",

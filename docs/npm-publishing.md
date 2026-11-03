@@ -88,8 +88,9 @@ before the clean-install checks above.
 
 ## Distribution tags
 
-Use the explicit `alpha` tag or an exact prerelease version. After the initial
-publication npm also assigned `latest` to alpha.3. An authenticated attempt to
-remove that tag returned HTTP 400, so it still points to alpha.3; alpha.4 is
-available through `@alpha` and `@0.1.0-alpha.4`. The package has no stable release.
-This tag state does not change the verified alpha.4 artifact or its provenance.
+Use the explicit `alpha` tag or an exact prerelease version. At the alpha.4
+publication, npm's initial `latest` tag still pointed to alpha.3 after an
+authenticated removal returned HTTP 400. The `alpha` tag moves with subsequent
+prereleases; check `npm view @hyscodebase/skillwhy dist-tags` for its current target.
+Exact versions such as `@0.1.0-alpha.4` retain their original artifacts and
+provenance. The package has no stable release.
