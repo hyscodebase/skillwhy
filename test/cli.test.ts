@@ -26,8 +26,18 @@ test("offline demo is explicitly synthetic and detects the disabled entry", asyn
   assert.equal(value.synthetic, true);
   assert.ok(value.differences.some((d: { kind: string }) => d.kind === "enabled-changed"));
   const human = await run(["demo"]);
-  assert.match(human.stdout, /SYNTHETIC EXAMPLE/);
-  assert.match(human.stdout, /NOT OBSERVED/);
+  assert.equal(human.code, 0, human.stderr);
+  assert.match(human.stdout, /Synthetic example; your project was not scanned/);
+  assert.match(human.stdout, /release-review: enabled → disabled/);
+  assert.match(human.stdout, /No model or Desktop session was inspected/);
+  assert.match(human.stdout, /npx --yes @hyscodebase\/skillwhy@alpha capture --cwd \./);
+  assert.doesNotMatch(human.stdout, /NOT OBSERVED|NOT ASSESSED|Note:/);
+  const detailed = await run(["demo", "--detail"]);
+  assert.equal(detailed.code, 0, detailed.stderr);
+  assert.match(detailed.stdout, /SYNTHETIC EXAMPLE/);
+  assert.match(detailed.stdout, /NOT OBSERVED/);
+  assert.match(detailed.stdout, /Note:/);
+  assert.deepEqual(JSON.parse((await run(["demo", "--json", "--detail"])).stdout), value);
 });
 
 test("bad arguments consistently fail with exit 2", async () => {

@@ -8,7 +8,7 @@ SkillWhy compares the skills that fresh Codex CLI processes discover. Capture tw
 
 ![A 42-second synthetic CLI demo: compare, inspect, preview a selected share, then compare the shares](https://raw.githubusercontent.com/hyscodebase/skillwhy/main/assets/demo.gif)
 
-Actual CLI output from synthetic fixtures, shown as excerpts. [Video](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo.mp4) · [Full transcript](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo-transcript.txt). This demonstrates the workflow; external user outcomes are still being evaluated.
+Actual alpha.3 CLI output from synthetic fixtures, shown as excerpts. The current default demo is shorter; `demo --detail` retains the diagnostic report. [Video](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo.mp4) · [Full transcript](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo-transcript.txt). This demonstrates the workflow; external user outcomes are still being evaluated.
 
 ## Try the offline demo
 
@@ -30,15 +30,18 @@ skillwhy demo
 Use the explicit `alpha` tag while prereleases are being evaluated. [GitHub release tarballs](https://github.com/hyscodebase/skillwhy/releases) with SHA-256 checksums remain available. From a checkout, use `npm ci`, then `npm run demo`; replace `skillwhy` below with `node dist/src/cli.js`.
 
 ```text
-SkillWhy · skill discovery comparison
-SYNTHETIC EXAMPLE — NOT A LIVE SCAN
+SkillWhy · demo complete
+Synthetic example; your project was not scanned.
 
-key:demo:release-review · enabled-changed
-  true → false [observed]
+release-review: enabled → disabled
 
-Model selected/read/executed a skill: NOT OBSERVED
-Existing Desktop session: NOT ASSESSED
+1 difference between two sample snapshots.
+Scope: discovery metadata. No model or Desktop session was inspected.
 ```
+
+This is the built-in example, not a capture of your environment. The command also
+prints the next capture step. Use `demo --detail` for the full evidence notes or
+`demo --json` for the structured comparison.
 
 ## Capture and compare
 

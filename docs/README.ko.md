@@ -5,7 +5,8 @@ Codex CLI를 새로 실행해 발견 목록을 수집하고 두 환경을 비교
 
 ![합성 데이터로 보여주는 42초 CLI 데모](https://raw.githubusercontent.com/hyscodebase/skillwhy/main/assets/demo.gif)
 
-실제 CLI 출력의 일부를 사용한 합성 예시입니다. [영상](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo.mp4)과 [전체 출력 기록](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo-transcript.txt)도 제공합니다.
+alpha.3 CLI 출력의 일부를 사용한 합성 예시입니다. 현재 기본 demo는 더 짧고,
+`demo --detail`로 상세 보고서를 볼 수 있습니다. [영상](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo.mp4)과 [전체 출력 기록](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo-transcript.txt)도 제공합니다.
 
 Node.js 22 이상이 있다면 한 줄로 데모를 실행할 수 있습니다.
 
@@ -25,6 +26,10 @@ skillwhy demo
 [GitHub 릴리스 파일](https://github.com/hyscodebase/skillwhy/releases)도 제공합니다.
 데모는 합성 데이터이며 API 키와 Codex 설치가 필요하지 않습니다.
 실제 수집은 검증된 Codex/OS 조합만 지원합니다.
+
+기본 demo는 예제 Skill의 `enabled → disabled` 차이와 실제 수집을 시작하는
+명령을 보여줍니다. 내 환경을 검사한 결과는 아닙니다. 긴 근거 설명은
+`demo --detail`, 구조화된 결과는 `demo --json`으로 확인할 수 있습니다.
 
 핵심 명령은 `demo`, `capture`, `inspect`, `diff`, `share`입니다.
 사용법은 [영문 README](../README.md), 지원 범위는

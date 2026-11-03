@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.0-alpha.5 — 2026-11-03
+
+- Show the built-in demo as a short onboarding example with readable enabled
+  states, a clear synthetic-data label, and an executable next capture step.
+- Honor `demo --detail` instead of always printing the detailed report. Preserve
+  the JSON comparison and real snapshot comparison reports.
+
 ## 0.1.0-alpha.4 — 2026-11-03
 
 - Recommend the public npm `alpha` installation in the English and Korean

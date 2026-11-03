@@ -6,7 +6,7 @@ import { compareSnapshots } from "./compare.js";
 import { createShareBundle } from "./share.js";
 import { readSnapshot, writeSnapshot } from "./io.js";
 import { demoSnapshots } from "./demo.js";
-import { display, renderCapture, renderComparison } from "./report.js";
+import { display, renderCapture, renderComparison, renderDemo } from "./report.js";
 import { inspectSnapshot, renderInspection } from "./inspect.js";
 import { VERSION } from "./version.js";
 
@@ -68,7 +68,7 @@ async function main(): Promise<number> {
   if (command === "demo") {
     const [left, right] = demoSnapshots();
     const comparison = compareSnapshots(left, right);
-    console.log(values.json ? JSON.stringify(comparison, null, 2) : renderComparison(comparison, true));
+    console.log(values.json ? JSON.stringify(comparison, null, 2) : renderDemo(comparison, values.detail ?? false));
     return comparison.status === "complete" ? 0 : 2;
   }
   if (command === "capture") {
