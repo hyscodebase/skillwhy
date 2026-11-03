@@ -5,13 +5,13 @@ not evidence of adoption or time saved. Stop after ten minutes, even if blocked.
 
 ## 1. Try the demo (about 2 minutes)
 
-With Node.js 22 or later and Git:
+With Node.js 22 or later:
 
 ```sh
-npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo
+npx --yes @hyscodebase/skillwhy@0.1.0-alpha.4 demo
 ```
 
-The initial download/build needs internet access. The synthetic demo needs no
+The initial compiled-package download needs internet access. The synthetic demo needs no
 Codex, API key, or model call. **Demo-only feedback is welcome and is kept separate
 from live native observations.** Note your approximate time to first success.
 
@@ -27,7 +27,7 @@ downgrade Codex for this pilot.
 If you do not already have SkillWhy installed, use the compiled release:
 
 ```sh
-npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.3/hyscodebase-skillwhy-0.1.0-alpha.3.tgz
+npm install --global @hyscodebase/skillwhy@0.1.0-alpha.4
 skillwhy --version
 ```
 

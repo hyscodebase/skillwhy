@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-03T05:24:26.832894+00:00",
+  "package": "@hyscodebase/skillwhy",
+  "version": "0.1.0-alpha.4",
+  "publishedAt": "2026-11-03T05:23:14.792Z",
+  "sha256": "3eaccea5703eff5fe188fa18a3827344e18b7ab651bd9eb3fc458ad2113af53e",
+  "integrity": "sha512-zNow/nckNdXQ34I71D10efiAFnbzsKafthqEUKnLTwtla0YRC1FOggtNsa9IaBurRVUHcsFTbou9cFMvbDlptg==",
+  "registryBytesMatchGitHubRelease": true,
+  "dist-tags": {
+    "latest": "0.1.0-alpha.3",
+    "alpha": "0.1.0-alpha.4"
+  },
+  "isolatedInstallVersion": "0.1.0-alpha.4",
+  "installedDemoStatus": "complete",
+  "isolatedNpxDemoMatchesInstalled": true,
+  "registrySignaturesVerified": true,
+  "provenanceAttestationsVerified": true,
+  "userConfig": "empty",
+  "globalConfig": "empty",
+  "runtime": "v24.8.0",
+  "npm": "11.11.0",
+  "githubSourceCommit": "3cea7e8fa1a0da0c891ec9e92afc4713d27d537d",
+  "publicationRun": "https://github.com/hyscodebase/skillwhy/actions/runs/41583232129",
+  "githubReleaseRun": "https://github.com/hyscodebase/skillwhy/actions/runs/41583223317",
+  "provenanceSourceMatchesReleaseTag": true,
+  "provenanceWorkflow": {
+    "ref": "refs/tags/v0.1.0-alpha.4",
+    "repository": "https://github.com/hyscodebase/skillwhy",
+    "path": ".github/workflows/npm-publish.yml"
+  },
+  "platform": "darwin/arm64"
+}
