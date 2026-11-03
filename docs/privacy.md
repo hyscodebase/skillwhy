@@ -46,5 +46,27 @@ SkillWhy does not delete it automatically because the path could have been
 replaced concurrently. Inspect and remove the incomplete file yourself before
 retrying, or choose a new output path.
 
-There are no uploads, hosted accounts, default telemetry, or automatic GitHub
-comments. The user decides whether and where to send an exported file.
+The CLI has no uploads, account requirement, default telemetry, or automatic
+GitHub comments. The user decides whether and where to send an exported file.
+
+## Optional web accounts
+
+The separate [member portal](../apps/portal/README.md) stores authentication data
+in its dedicated Supabase project. Its application tables contain an account ID,
+email address, display name, role, access status, timestamps, account-deletion
+review requests, and a minimal audit trail. Profile access is restricted to the
+owner or an active administrator; audit events are administrator-only.
+The portal receives no CLI snapshots, skill inventory, or CLI usage telemetry.
+
+Portal registration is optional. A deletion request enters an operator review
+queue; submitting it does not immediately erase Auth records or personal data.
+Email delivery and the initial administrator must be configured by the operator
+before external enrollment. No automatic data-retention deadline is promised.
+
+## Voluntary interviews and pilots
+
+Participation forms are separate from CLI execution and web accounts. Information
+a participant deliberately submits is stored in the operator's FormHug response
+inbox and can be reviewed with AI tools for administrative sorting. Contact
+details are optional; raw responses and contacts are not copied to this public
+repository. Public summaries require separate approval of their exact wording.
