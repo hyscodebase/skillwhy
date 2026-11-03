@@ -18,6 +18,29 @@ macOS arm64, with no registry login available to the installation process.
 This establishes public package distribution and the offline demo, rather than
 additional native Codex compatibility or external adoption.
 
+### Alpha.4 OIDC publication
+
+The [npm distribution run 41583232129](https://github.com/hyscodebase/skillwhy/actions/runs/41583232129)
+published `0.1.0-alpha.4` from tag `v0.1.0-alpha.4` at commit
+`3cea7e8fa1a0da0c891ec9e92afc4713d27d537d`. The separate
+[GitHub release run 41583223317](https://github.com/hyscodebase/skillwhy/actions/runs/41583223317)
+passed its shared Node 22/24 Linux/macOS CI and published the compiled tarball.
+
+The public registry download and the GitHub release asset were byte-identical,
+with SHA-256 `3eaccea5703eff5fe188fa18a3827344e18b7ab651bd9eb3fc458ad2113af53e`.
+A new temporary prefix and cache with empty user/global npm configs installed
+`@alpha` as `0.1.0-alpha.4`. Its version command, installed JSON demo, and the
+README's `npx --yes @hyscodebase/skillwhy@alpha demo --json` route passed on
+macOS arm64, Node 24.8.0, npm 11.11.0.
+
+`npm audit signatures` reported one verified registry signature and one verified
+attestation. The verified SLSA provenance's subject digest matched the tarball;
+its source commit, tag ref, workflow path, and invocation matched the run above.
+The npm Trusted Publisher now reports `Valid`. The
+[sanitized publication record](npm-evidence/alpha4-publication.json) preserves
+these checks without login credentials or local paths. These observations do
+not constitute additional live native support or external pilot outcomes.
+
 ## Alpha.3 native support investigation
 
 After extracting the production compatibility manifest, the existing macOS arm64

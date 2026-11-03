@@ -3,6 +3,10 @@
 The public [npm package](https://www.npmjs.com/package/@hyscodebase/skillwhy) is
 available. The initial `0.1.0-alpha.3` publication and an isolated public registry
 installation were verified on 2026-11-03; see [the validation record](validation.md#public-npm-installation).
+The subsequent `0.1.0-alpha.4` release was published by GitHub Actions OIDC,
+installed publicly, and had its registry signature and provenance verified.
+[Preserved evidence](npm-evidence/alpha4-publication.json) records its source commit,
+workflow, integrity, and installation checks.
 Use `npx --yes @hyscodebase/skillwhy@alpha demo` for the offline demo.
 
 The package is published as `@hyscodebase/skillwhy`, with public access, an `alpha`
@@ -66,9 +70,10 @@ when configuring the package; a successful dry run does not prove npm publishing
 authorization is configured.
 
 A newly created connection must complete its first successful publication within
-2 days. The connection was saved on 2026-11-03; its first real OIDC publication is
-still pending. Do not treat saving the form or a dry run as successful registry
-authorization. Once a version is published, use a new version and tag for the
+2 days. The connection was saved and validated on 2026-11-03 by the successful
+[alpha.4 publication](https://github.com/hyscodebase/skillwhy/actions/runs/41583232129).
+npm reports this connection as `Valid`. Saving the form or a dry run alone does
+not establish successful registry authorization. Once a version is published, use a new version and tag for the
 next attempt that changes package contents; do not replace published versions.
 
 ## Availability after publication
@@ -80,3 +85,11 @@ describes a typical delay of a few minutes, which can take longer. An immediate
 republished. Check the existing version and its integrity again before any retry.
 The initial alpha.3 request returned HTTP 202 and became publicly installable
 before the clean-install checks above.
+
+## Distribution tags
+
+Use the explicit `alpha` tag or an exact prerelease version. After the initial
+publication npm also assigned `latest` to alpha.3. An authenticated attempt to
+remove that tag returned HTTP 400, so it still points to alpha.3; alpha.4 is
+available through `@alpha` and `@0.1.0-alpha.4`. The package has no stable release.
+This tag state does not change the verified alpha.4 artifact or its provenance.

@@ -52,7 +52,7 @@ CLI 도구가 해결했다고 연결하지 않는다. C03에는 installer 문제
 >
 > 현재 live capture는 **Codex CLI 0.166.0 / macOS arm64·Linux x64**를 지원합니다. Linux에서 실제 검증한 환경은 Ubuntu 24.04입니다. 기존 Desktop 세션이나 모델의 실제 skill 선택·실행은 검사하지 않습니다. Node.js 22+와 Git이 있으면 다음 합성 데모를 실행할 수 있습니다. 최초 실행에는 다운로드와 빌드가 필요하고, 데모에는 Codex나 API 키가 필요하지 않습니다.
 >
-> `npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo`
+> `npx --yes @hyscodebase/skillwhy@alpha demo`
 >
 > TypeScript로 작성했고 runtime dependency는 없습니다. native 발견 검증 자체를 새로 발명한 것은 아니며, 작은 비교 결과와 검토 가능한 공유 파일에 범위를 좁혔습니다. 아직 외부 파일럿 결과는 없습니다. 출력에서 “확인된 차이”와 “아직 모르는 것”이 잘 구분되는지 피드백을 받고 싶습니다. 원본 설정이나 snapshot을 올리지 않아도 됩니다.
 >
@@ -76,7 +76,7 @@ CLI 도구가 해결했다고 연결하지 않는다. C03에는 installer 문제
 >
 > Live capture currently supports **Codex CLI 0.166.0 on macOS arm64 and Linux x64**, with Linux native checks on Ubuntu 24.04. For a synthetic demo, you need Node.js 22+ and Git, but no Codex installation or API key:
 >
-> `npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo`
+> `npx --yes @hyscodebase/skillwhy@alpha demo`
 >
 > The first run downloads and builds the tagged source. Code and instructions: https://github.com/hyscodebase/skillwhy
 >
