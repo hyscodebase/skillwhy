@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-alpha.4 — 2026-11-03
+
+- Recommend the public npm `alpha` installation in the English and Korean
+  quickstarts after an isolated registry install and demo passed for alpha.3.
+- Record the initial package's integrity against the compiled GitHub release,
+  and document npm's publish-time availability delay and OIDC validation gate.
+- Include reviewed GitHub Actions updates in this release. Native capture
+  support and comparison behavior are unchanged from alpha.3.
+
 ## 0.1.0-alpha.3 — 2026-11-02
 
 - Add specific next steps for unsupported, partial, and failed captures and

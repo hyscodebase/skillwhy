@@ -1,7 +1,22 @@
 # Alpha validation record
 
-Date: 2026-11-02. These observations are scoped engineering checks, not a claim
+Updated: 2026-11-03. These observations are scoped engineering checks, not a claim
 of production readiness, adoption, or model accuracy.
+
+## Public npm installation
+
+On 2026-11-03, `@hyscodebase/skillwhy@0.1.0-alpha.3` became available from the
+public npm registry. Its registry SHA-1 and SHA-512 integrity matched the compiled
+GitHub release tarball; that file's SHA-256 is
+`7e87ba34b8da5fca027cd5eb54e7aa796b27ec536e19f9eb4cdcd8f8221a3fcd`.
+
+An installation into a new temporary prefix, with a new cache and empty user and
+global npm configuration, reported `0.1.0-alpha.3` and ran `demo --json` with
+`status: complete`. An isolated `npm exec --package=@hyscodebase/skillwhy@alpha`
+demo produced the same JSON. These checks used Node 24.8.0 and npm 11.11.0 on
+macOS arm64, with no registry login available to the installation process.
+This establishes public package distribution and the offline demo, rather than
+additional native Codex compatibility or external adoption.
 
 ## Alpha.3 native support investigation
 

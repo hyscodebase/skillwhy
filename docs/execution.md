@@ -8,7 +8,7 @@ Preparing materials is not equivalent to completing an external validation gate.
 | 1. Maintainer problem interviews | Five candidate projects researched; bilingual questions and invitation drafts prepared | Five actual interviews and two recurring, relevant problems |
 | 2. External pilots | Self-serve guide and report form available | Three external attempts; at least two useful comparisons without author assistance |
 | 3. Correct repeated pilot friction | Engineering review added explicit next steps for unsupported, partial, and unassociated results | Two repeated pilot blockers corrected and rechecked by participants |
-| 4. npm distribution | Public alpha metadata and an optional packaging/publication workflow prepared | Namespace owner authenticates, first package publishes, clean registry install passes; then trusted publisher setup |
+| 4. npm distribution | Alpha.3 published publicly; isolated registry install and npx demo passed with matching release integrity; exact GitHub Trusted Publisher configured | First successful OIDC publication and clean install of that release |
 | 5. Broader native compatibility | Ubuntu 24.04 x64 candidate and production checks passed on Node 22/24; macOS production checks pass | Complete for the newly admitted Codex 0.166.0/Linux x64 tuple; other combinations remain outside the evidence |
 | 6. Two useful external cases | Interview and evidence-register formats prepared | Two participant-confirmed, approved public accounts of help with an actual problem |
 | 7. Demonstration and README | 42-second GIF/MP4 and transcript published; public assets were fetched and matched their local hashes | Complete for the synthetic demonstration; actual user cases remain task 6 |
@@ -16,8 +16,8 @@ Preparing materials is not equivalent to completing an external validation gate.
 | 9. Targeted introduction and weekly evidence | Two channel drafts prepared; first hosted public-aggregate report succeeded | Approved account-based publication and response handling |
 
 The initial external interview, completed-pilot, and approved-case registers are
-empty. npm authentication was unavailable during preparation. These are pending
-dependencies, not successful outcomes. Keep [the interview record](interviews.md),
+empty. npm publication and an isolated registry install were verified on
+2026-11-03; external participants remain pending. Keep [the interview record](interviews.md),
 [outreach record](outreach.md), [npm status](npm-publishing.md), and
 [native compatibility evidence](compatibility.md) aligned as evidence arrives.
 
