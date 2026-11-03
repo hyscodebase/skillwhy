@@ -125,6 +125,9 @@ npm run build
 npm run test:database
 ```
 
+`typecheck`는 먼저 `next typegen`으로 환경·경로 타입을 생성합니다. Next.js가
+개발/빌드 모드에 맞게 다시 쓰는 `next-env.d.ts`는 Git에 저장하지 않습니다.
+
 마지막 명령은 Docker와 `postgres:17.11-bookworm` 이미지를 사용합니다. 외부 네트워크와
 호스트 포트가 없는 일회용 컨테이너에서 실제 PostgreSQL RLS/RPC를 실행하고 제거합니다.
 테스트용 `auth` 테이블·JWT helper는 최소 fixture입니다. 이는 Supabase GoTrue, 실제
