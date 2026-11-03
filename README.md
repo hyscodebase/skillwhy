@@ -99,10 +99,22 @@ npm run typecheck
 
 No runtime dependencies. Tests use synthetic records and local fake subprocesses; [live compatibility observations](docs/validation.md) are documented separately. Tag releases run the test matrix, install the packaged CLI in a temporary directory, and publish the tarball with its checksum; see [release maintenance](docs/releasing.md).
 
+## Optional member portal
+
+[The separate web app](apps/portal/README.md) provides email authentication,
+profiles, administrator member status management, account deletion review
+requests, and an audit trail. Registration creates a least-privilege profile
+automatically. The portal uses its own Supabase project and needs Auth, email,
+and first-administrator setup before opening enrollment. Portal registrations
+are not measurements of CLI usage or external pilot success.
+
+The CLI continues to run locally without a portal account. The portal receives
+no CLI snapshots or usage events. Its source is excluded from the CLI npm package.
+
 Try the [10-minute pilot](docs/pilot.md) to report installation friction or a useful support case. External pilot outcomes have not yet been established.
 
 For incomplete results, see [troubleshooting](docs/troubleshooting.md). Maintainers can use the [interview guide](docs/interviews.md) and [weekly metrics](docs/metrics.md) to track feedback. [npm distribution](docs/npm-publishing.md) records publication and clean-install evidence.
 
 [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [한국어](docs/README.ko.md) · [Roadmap](docs/roadmap.md)
 
-MIT licensed. No default telemetry, accounts, or hosted service.
+MIT licensed. The CLI has no default telemetry, account requirement, or hosted service dependency.
