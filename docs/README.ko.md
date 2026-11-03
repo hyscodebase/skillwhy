@@ -7,20 +7,22 @@ Codex CLI를 새로 실행해 발견 목록을 수집하고 두 환경을 비교
 
 실제 CLI 출력의 일부를 사용한 합성 예시입니다. [영상](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo.mp4)과 [전체 출력 기록](https://github.com/hyscodebase/skillwhy/blob/main/assets/demo-transcript.txt)도 제공합니다.
 
-Node.js 22 이상과 Git이 있다면 한 줄로 데모를 실행할 수 있습니다.
+Node.js 22 이상이 있다면 한 줄로 데모를 실행할 수 있습니다.
 
 ```sh
-npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo
+npx --yes @hyscodebase/skillwhy@alpha demo
 ```
 
-처음에는 해당 태그의 소스와 빌드 의존성을 다운로드합니다.
+처음에는 빌드된 [npm 패키지](https://www.npmjs.com/package/@hyscodebase/skillwhy)를 다운로드합니다.
 빌드된 패키지를 한 번 설치하고 짧은 명령으로 사용하려면:
 
 ```sh
-npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.3/hyscodebase-skillwhy-0.1.0-alpha.3.tgz
+npm install --global @hyscodebase/skillwhy@alpha
 skillwhy demo
 ```
 
+초기 버전을 사용하려면 `alpha` 태그를 명시하세요. SHA-256 체크섬이 포함된
+[GitHub 릴리스 파일](https://github.com/hyscodebase/skillwhy/releases)도 제공합니다.
 데모는 합성 데이터이며 API 키와 Codex 설치가 필요하지 않습니다.
 실제 수집은 검증된 Codex/OS 조합만 지원합니다.
 
@@ -55,7 +57,7 @@ Desktop 채팅의 상태도 검사하지 않습니다. 공유 파일은 한 항�
 1,000스타는 도전 목표이며 제품의 성능이나 성공을 보장하는 수치가 아닙니다.
 
 실제 실행 검증은 [검증 기록](validation.md), 다음 버전 발행과 지원 범위 확대 절차는
-[릴리스 가이드](releasing.md)를 참고하세요. GitHub에서 패키지를 배포하며 npm 레지스트리에는 아직 게시하지 않았습니다.
+[릴리스 가이드](releasing.md)를 참고하세요. npm 공개 레지스트리와 GitHub에서 패키지를 배포합니다.
 
 첫 사용 경험과 실제 도움 여부를 확인할 [10분 파일럿 안내](pilot.md)와 피드백 양식도 제공합니다.
 외부 사용자의 파일럿 결과와 반복 사용은 아직 검증되지 않았습니다.

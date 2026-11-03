@@ -6,7 +6,7 @@ SkillWhy's release workflow builds a downloadable npm tarball and `SHA256SUMS` o
 
 1. Change the version in `package.json` and both version fields in `package-lock.json`. `src/version.ts` reads the installed package metadata, so there is no second CLI version constant to update.
 2. Update the changelog and compatibility evidence. Run `npm ci`, `npm test`, and `npm run typecheck`. `npm test` includes the release gate and publication state tests.
-3. Merge the release commit into `main`. Wait for the normal branch CI, then tag that exact commit, for example `git tag -a v0.1.0-alpha.3 -m 'SkillWhy 0.1.0-alpha.2'` and `git push origin v0.1.0-alpha.3`.
+3. Merge the release commit into `main`. Wait for the normal branch CI, then tag that exact commit, for example `git tag -a v0.1.0-alpha.4 -m 'SkillWhy 0.1.0-alpha.4'` and `git push origin v0.1.0-alpha.4`.
 4. Watch **GitHub prerelease** in Actions. The release becomes public only after workflow lint, all four Linux/macOS × Node 22/24 jobs, and the packaged installation smoke checks pass.
 
 Tag pushes matching `v*` trigger the workflow. The tag must equal `v` plus the package version, point to the checked out/event commit, and already be an ancestor of `origin/main`. Annotated and lightweight tags both work. Only prerelease versions such as `0.1.0-alpha.2` are accepted; stable versions and build metadata are deliberately rejected until a stable-release policy is added. A prerelease is never marked as the repository's latest stable release.
@@ -35,7 +35,7 @@ npm ci
 RELEASE_DIR="$(mktemp -d)/assets" node scripts/release-build.mjs
 ```
 
-The command prints a manifest of the two assets. It installs only into a temporary prefix and does not publish anything. `RELEASE_DIR` must not already exist; keeping old artifacts in place causes a failure instead of silently reusing them. The temporary installed prefix is removed; the requested output directory remains for inspection. Version/tag ancestry is checked separately by `RELEASE_TAG=v0.1.0-alpha.3 node scripts/release-check.mjs` after creating the tag.
+The command prints a manifest of the two assets. It installs only into a temporary prefix and does not publish anything. `RELEASE_DIR` must not already exist; keeping old artifacts in place causes a failure instead of silently reusing them. The temporary installed prefix is removed; the requested output directory remains for inspection. Version/tag ancestry is checked separately by `RELEASE_TAG=v0.1.0-alpha.4 node scripts/release-check.mjs` after creating the tag.
 
 ## Install a release asset
 
@@ -43,7 +43,7 @@ Download the `.tgz` file and `SHA256SUMS` from the same GitHub prerelease. In th
 
 ```sh
 shasum -a 256 -c SHA256SUMS
-npm install --prefix ./skillwhy-install --ignore-scripts --no-audit --no-fund ./hyscodebase-skillwhy-0.1.0-alpha.3.tgz
+npm install --prefix ./skillwhy-install --ignore-scripts --no-audit --no-fund ./hyscodebase-skillwhy-0.1.0-alpha.4.tgz
 ./skillwhy-install/node_modules/.bin/skillwhy --version
 ./skillwhy-install/node_modules/.bin/skillwhy demo
 ```

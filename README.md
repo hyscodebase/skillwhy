@@ -12,22 +12,22 @@ Actual CLI output from synthetic fixtures, shown as excerpts. [Video](https://gi
 
 ## Try the offline demo
 
-Requires Node.js 22 or later and Git:
+Requires Node.js 22 or later:
 
 ```sh
-npx --yes github:hyscodebase/skillwhy#v0.1.0-alpha.3 demo
+npx --yes @hyscodebase/skillwhy@alpha demo
 ```
 
-The first run downloads and builds the tagged source. The demo uses synthetic snapshots. It needs no Codex installation, API key, or model call.
+The first run downloads the compiled [npm package](https://www.npmjs.com/package/@hyscodebase/skillwhy). The demo uses synthetic snapshots. It needs no Codex installation, API key, or model call.
 
-To install the compiled GitHub release once and use the shorter `skillwhy` command:
+To install once and use the shorter `skillwhy` command:
 
 ```sh
-npm install --global https://github.com/hyscodebase/skillwhy/releases/download/v0.1.0-alpha.3/hyscodebase-skillwhy-0.1.0-alpha.3.tgz
+npm install --global @hyscodebase/skillwhy@alpha
 skillwhy demo
 ```
 
-This is a GitHub release, not an npm registry publication. Release assets include a SHA-256 checksum. From a checkout, use `npm ci`, then `npm run demo`; replace `skillwhy` below with `node dist/src/cli.js`.
+Use the explicit `alpha` tag while prereleases are being evaluated. [GitHub release tarballs](https://github.com/hyscodebase/skillwhy/releases) with SHA-256 checksums remain available. From a checkout, use `npm ci`, then `npm run demo`; replace `skillwhy` below with `node dist/src/cli.js`.
 
 ```text
 SkillWhy · skill discovery comparison
@@ -101,7 +101,7 @@ No runtime dependencies. Tests use synthetic records and local fake subprocesses
 
 Try the [10-minute pilot](docs/pilot.md) to report installation friction or a useful support case. External pilot outcomes have not yet been established.
 
-For incomplete results, see [troubleshooting](docs/troubleshooting.md). Maintainers can use the [interview guide](docs/interviews.md) and [weekly metrics](docs/metrics.md) to track feedback. Registry publication is being prepared separately; [npm distribution](docs/npm-publishing.md) records its current status.
+For incomplete results, see [troubleshooting](docs/troubleshooting.md). Maintainers can use the [interview guide](docs/interviews.md) and [weekly metrics](docs/metrics.md) to track feedback. [npm distribution](docs/npm-publishing.md) records publication and clean-install evidence.
 
 [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [한국어](docs/README.ko.md) · [Roadmap](docs/roadmap.md)
 
